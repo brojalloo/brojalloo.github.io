@@ -1,0 +1,11 @@
+# Normalise line endings so the repository always stores LF, whatever the
+# machine. Without this, checking out on Windows and committing back rewrites
+# every file and turns a one-line change into a 46-file diff.
+* text=auto eol=lf
+
+# Binary — never touch these.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.woff binary
+*.woff2 binary
