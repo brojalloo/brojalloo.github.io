@@ -1,0 +1,171 @@
+@import '@fontsource-variable/archivo';
+@import '@fontsource-variable/public-sans';
+@import '@fontsource/martian-mono/400.css';
+@import '@fontsource/martian-mono/600.css';
+
+@import 'tailwindcss';
+
+/*
+  DESIGN SYSTEM — "Instrument"
+  --------------------------------------------------------------------------
+  Not a hacker movie. A measurement bench.
+
+  The palette comes from the instruments Ibrahima actually runs: the amber of
+  a Grafana dashboard and a Prometheus alert, the desaturated teal of a signal
+  trace on dark glass, the red of a CRITICAL finding. Amber leads instead of
+  the usual acid green — it is the colour of the tools, and of the latérite
+  earth around Dakar.
+*/
+
+@theme {
+  /* ---- Ground ---- */
+  --color-void: #06080b; /* deepest background, the space the scene floats in */
+  --color-hull: #0c1219; /* panel bodies */
+  --color-plate: #131b25; /* raised surfaces, cards */
+  --color-rule: #1e2936; /* hairlines, borders */
+
+  /* ---- Signal ---- */
+  --color-amber: #ff7a1a; /* primary accent: instruments, focus, the core */
+  --color-amber-dim: #b8541010;
+  --color-trace: #4dd8c0; /* data in motion: packets, links, live values */
+  --color-alert: #ff3b4e; /* CRITICAL — used exactly once, at the Trivy gate */
+
+  /* ---- Type ---- */
+  --color-bone: #e9e5db; /* primary text, warm off-white */
+  --color-ash: #8d99a8; /* secondary text */
+  --color-mute: #55606e; /* tertiary, labels at rest */
+
+  --font-display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --font-body: 'Public Sans Variable', 'Public Sans', system-ui, sans-serif;
+  --font-mono: 'Martian Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --ease-instrument: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background: var(--color-void);
+    color: var(--color-bone);
+    font-family: var(--font-body);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+
+  /* The scene owns the viewport; only panels scroll. */
+  #root {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  canvas {
+    display: block;
+    touch-action: none;
+    outline: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    /* Archivo Variable carries a width axis — the expanded cut reads like a
+       panel legend rather than a generic sans headline. */
+    font-variation-settings: 'wdth' 112;
+    letter-spacing: -0.022em;
+    line-height: 1.02;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* Focus is part of the instrument, not an afterthought. */
+  :focus-visible {
+    outline: 2px solid var(--color-amber);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-amber);
+    color: var(--color-void);
+  }
+}
+
+@layer components {
+  /* Small caps label used across the HUD and panel headers. */
+  .legend {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-mute);
+  }
+
+  .readout {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    color: var(--color-ash);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Hairline that fades at both ends, like a printed scale. */
+  .hairline {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-rule) 12%,
+      var(--color-rule) 88%,
+      transparent
+    );
+  }
+}
+
+/* Panel scrollbars: thin, amber, only visible while scrolling matters. */
+.panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule) transparent;
+}
+.panel-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-rule);
+  border-radius: 3px;
+}
+.panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-amber);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
