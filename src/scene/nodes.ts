@@ -9,12 +9,14 @@ import type { NodeSpec } from '../types'
  * and the composition should say so before any text does.
  */
 export const NODES: NodeSpec[] = [
-  { id: 'pipeline', position: [5.5, 1.9, 2.2], radius: 0.85, orbitSpeed: 0.055, shape: 'icosahedron' },
-  { id: 'projets', position: [1.0, 5.8, -1.4], radius: 0.58, orbitSpeed: 0.05, shape: 'box' },
-  { id: 'whoami', position: [-4.9, 3.4, 1.6], radius: 0.58, orbitSpeed: 0.048, shape: 'dodecahedron' },
-  { id: 'parcours', position: [-5.5, -2.1, -2.0], radius: 0.5, orbitSpeed: 0.042, shape: 'tetrahedron' },
-  { id: 'contact', position: [-0.6, -5.9, 1.0], radius: 0.46, orbitSpeed: 0.058, shape: 'torus' },
-  { id: 'arsenal', position: [4.5, -3.8, -1.8], radius: 0.6, orbitSpeed: 0.062, shape: 'octahedron' },
+  { id: 'pipeline', position: [5.7, 1.5, 2.2], radius: 0.85, orbitSpeed: 0.055, shape: 'icosahedron' },
+  { id: 'projets', position: [2.4, 5.4, -1.2], radius: 0.58, orbitSpeed: 0.05, shape: 'box' },
+  { id: 'whoami', position: [-2.7, 5.3, 1.8], radius: 0.6, orbitSpeed: 0.048, shape: 'dodecahedron' },
+  // A flat disc: the node reads as a seal, which is what a certification is.
+  { id: 'certifications', position: [-5.8, 1.2, -0.8], radius: 0.55, orbitSpeed: 0.045, shape: 'cylinder' },
+  { id: 'parcours', position: [-4.6, -3.7, -2.2], radius: 0.5, orbitSpeed: 0.042, shape: 'tetrahedron' },
+  { id: 'contact', position: [0, -5.9, 1.2], radius: 0.46, orbitSpeed: 0.058, shape: 'torus' },
+  { id: 'arsenal', position: [4.6, -3.7, -1.6], radius: 0.6, orbitSpeed: 0.062, shape: 'octahedron' },
 ]
 
 export const NODE_BY_ID = Object.fromEntries(NODES.map((n) => [n.id, n])) as Record<

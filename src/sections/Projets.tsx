@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { stagger, useRise } from './motion'
-import { CONTENT, PROJECTS } from '../content'
+import { CONTENT, IDENTITY, PROJECTS } from '../content'
 import type { Lang, Project } from '../types'
 import { useApp } from '../store'
 
@@ -11,14 +11,35 @@ import { useApp } from '../store'
   than crashing.
 */
 type ProjetsCopy = (typeof CONTENT)[Lang]['projets']
-type ProjectKey = Extract<keyof ProjetsCopy, 'devopsLab' | 'tekkiPro'>
+type ProjectKey = Extract<keyof ProjetsCopy, 'devopsLab' | 'tekkiPro' | 'senRecrutement'>
+
+const PROJECT_KEYS: ProjectKey[] = ['devopsLab', 'tekkiPro', 'senRecrutement']
 
 function isProjectKey(key: string): key is ProjectKey {
-  return key === 'devopsLab' || key === 'tekkiPro'
+  return (PROJECT_KEYS as string[]).includes(key)
 }
 
 function copyFor(copy: ProjetsCopy, project: Project) {
   return isProjectKey(project.key) ? copy[project.key] : null
+}
+
+const linkClass =
+  'group inline-flex items-baseline gap-2 font-mono text-[0.66rem] tracking-[0.18em] uppercase'
+
+/** Text link whose underline draws on hover. Shared by the repo and the CTA. */
+function DrawnLink({ href, children }: { href: string; children: string }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={`${linkClass} text-amber`}>
+      <span className="relative">
+        {children}
+        <span
+          aria-hidden="true"
+          className="absolute -bottom-1 left-0 h-px w-0 bg-amber transition-[width] duration-300 ease-out group-hover:w-full group-focus-visible:w-full"
+        />
+      </span>
+      <span aria-hidden="true">↗</span>
+    </a>
+  )
 }
 
 export function Projets() {
@@ -37,17 +58,31 @@ export function Projets() {
         const copy = copyFor(c, project)
         if (!copy) return null
 
+        // The stack is empty for projects whose technologies are not publicly
+        // verifiable, so the metadata line falls back to the year alone.
+        const meta = [project.year, ...project.stack]
+
         return (
           <motion.article key={project.key} variants={item} className={i === 0 ? 'mt-12' : 'mt-16'}>
             {i > 0 ? <div className="hairline mb-16" /> : null}
 
-            <h3 className="text-2xl text-bone sm:text-3xl">{project.name}</h3>
+            {project.featured ? (
+              <p className="legend mb-3 text-amber">{c.featuredLabel}</p>
+            ) : null}
+
+            <h3
+              className={
+                project.featured ? 'text-3xl text-bone sm:text-4xl' : 'text-2xl text-bone sm:text-3xl'
+              }
+            >
+              {project.name}
+            </h3>
 
             <p className="mt-3 flex flex-wrap items-center gap-y-1 font-mono text-[0.64rem] tracking-[0.08em] text-mute">
-              {[project.year, ...project.stack].map((meta, k) => (
-                <span key={meta} className="flex items-center gap-3">
+              {meta.map((value, k) => (
+                <span key={value} className="flex items-center gap-3">
                   {k > 0 ? <span aria-hidden="true" className="h-3 w-px bg-rule" /> : null}
-                  <span className={k === 0 ? 'tabular-nums text-ash' : undefined}>{meta}</span>
+                  <span className={k === 0 ? 'tabular-nums text-ash' : undefined}>{value}</span>
                 </span>
               ))}
             </p>
@@ -56,39 +91,40 @@ export function Projets() {
               {copy.summary}
             </p>
 
-            <ul className="mt-8 border-t border-rule">
-              {project.highlights.map((key) => {
-                const line = copy.highlights[key]
-                if (!line) return null
-                return (
-                  <li
-                    key={key}
-                    className="border-b border-rule py-3 text-[0.9rem] leading-[1.6] text-bone"
-                  >
-                    {line}
-                  </li>
-                )
-              })}
-            </ul>
+            {project.highlights.length > 0 ? (
+              <ul className="mt-8 border-t border-rule">
+                {project.highlights.map((key) => {
+                  const line = copy.highlights[key]
+                  if (!line) return null
+                  return (
+                    <li
+                      key={key}
+                      className="border-b border-rule py-3 text-[0.9rem] leading-[1.6] text-bone"
+                    >
+                      {line}
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : null}
 
-            <a
-              href={project.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group mt-6 inline-flex items-baseline gap-2 font-mono text-[0.66rem] tracking-[0.18em] text-amber uppercase"
-            >
-              <span className="relative">
-                {c.open}
-                <span
-                  aria-hidden="true"
-                  className="absolute -bottom-1 left-0 h-px w-0 bg-amber transition-[width] duration-300 ease-out group-hover:w-full group-focus-visible:w-full"
-                />
-              </span>
-              <span aria-hidden="true">↗</span>
-            </a>
+            <div className="mt-6">
+              {project.repo ? (
+                <DrawnLink href={project.repo}>{c.open}</DrawnLink>
+              ) : (
+                // No repository exists, so no link is rendered — not a disabled
+                // one, not a placeholder. The absence is stated instead.
+                <p className="legend">{c.noRepo}</p>
+              )}
+            </div>
           </motion.article>
         )
       })}
+
+      <motion.div variants={item} className="mt-16">
+        <div className="hairline mb-8" />
+        <DrawnLink href={IDENTITY.github}>{c.all}</DrawnLink>
+      </motion.div>
     </motion.div>
   )
 }

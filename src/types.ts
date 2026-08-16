@@ -4,15 +4,24 @@
  * the HUD, and the content files alike.
  */
 
-/** The six orbiting nodes. `null` means we are at the overview. */
-export type NodeId = 'whoami' | 'pipeline' | 'arsenal' | 'parcours' | 'projets' | 'contact'
+/** The seven orbiting nodes. `null` means we are at the overview. */
+export type NodeId =
+  | 'whoami'
+  | 'arsenal'
+  | 'certifications'
+  | 'projets'
+  | 'pipeline'
+  | 'parcours'
+  | 'contact'
 
+/** Navigation order — this is the order the index and the fallback both use. */
 export const NODE_IDS: NodeId[] = [
   'whoami',
-  'pipeline',
   'arsenal',
-  'parcours',
+  'certifications',
   'projets',
+  'pipeline',
+  'parcours',
   'contact',
 ]
 
@@ -30,8 +39,15 @@ export interface NodeSpec {
   radius: number
   /** Rotational speed around the core, radians/second. */
   orbitSpeed: number
-  /** Platonic solid used for the node body — each node reads differently. */
-  shape: 'icosahedron' | 'octahedron' | 'box' | 'tetrahedron' | 'dodecahedron' | 'torus'
+  /** Solid used for the node body — each node reads differently. */
+  shape:
+    | 'icosahedron'
+    | 'octahedron'
+    | 'box'
+    | 'tetrahedron'
+    | 'dodecahedron'
+    | 'torus'
+    | 'cylinder'
 }
 
 /** One stage of the Jenkins pipeline, for the signature scene. */
@@ -52,12 +68,25 @@ export interface SkillGroup {
 export interface Project {
   key: string
   name: string
-  repo: string
-  /** Language breakdown as reported by GitHub, largest first. */
+  /** `null` when no public repository exists — the link is then omitted. */
+  repo: string | null
+  /** Technologies actually used. Empty when they are not publicly verifiable. */
   stack: string[]
   /** Bullet points of what the project actually does. */
   highlights: string[]
   year: string
+  /** The main project, drawn as a full-width featured entry. */
+  featured?: boolean
+}
+
+export interface Certification {
+  key: string
+  name: string
+  issuer: string
+  /** Month and year, or `null` when only completion is confirmed. */
+  date: string | null
+  /** Drawn with a heavier treatment — the ones worth reading first. */
+  featured?: boolean
 }
 
 export interface TimelineEntry {

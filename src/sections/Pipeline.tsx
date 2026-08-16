@@ -2,10 +2,13 @@ import type { ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import { EASE, stagger, useRise } from './motion'
-import { CONTENT, STAGES } from '../content'
+import { ARCHITECTURE, CONTENT, PROOFS, STAGES } from '../content'
 import { useApp } from '../store'
 
 type Item = Variants
+
+/** The repository the whole section describes. */
+const REPO = 'https://github.com/brojalloo/devops-lap'
 
 function pad(n: number) {
   return n.toString().padStart(2, '0')
@@ -22,6 +25,34 @@ function Block({ item, title, children }: { item: Item; title: string; children:
   )
 }
 
+/** Decorative connector between two steps of the architecture diagram. */
+function Connector() {
+  return (
+    <span aria-hidden="true" className="flex w-6 justify-center py-1">
+      <svg width="9" height="20" viewBox="0 0 9 20" fill="none" className="text-rule">
+        <path d="M4.5 0v14" stroke="currentColor" strokeWidth="1" />
+        <path d="M1.5 12 4.5 16.5 7.5 12" stroke="currentColor" strokeWidth="1" />
+      </svg>
+    </span>
+  )
+}
+
+/** Verified-result tick. Never an emoji — a drawn mark, like a checked box. */
+function Tick() {
+  return (
+    <svg
+      aria-hidden="true"
+      width="11"
+      height="11"
+      viewBox="0 0 11 11"
+      fill="none"
+      className="mt-[0.32rem] shrink-0 text-trace"
+    >
+      <path d="M1 5.6 4.1 8.8 10 1.8" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  )
+}
+
 export function Pipeline() {
   const lang = useApp((s) => s.lang)
   const stage = useApp((s) => s.stage)
@@ -32,6 +63,12 @@ export function Pipeline() {
   const item = useRise()
   const c = CONTENT[lang].pipeline
 
+  // role="img" hides the drawing from assistive tech, so the flow is spelled
+  // out once, in order, in this label.
+  const flowLabel = `${c.architecture.title}. ${c.architecture.note} ${ARCHITECTURE.map(
+    (step) => step.label,
+  ).join(', ')}.`
+
   return (
     <motion.div variants={stagger} initial="hidden" animate="show">
       <motion.header variants={item}>
@@ -40,8 +77,53 @@ export function Pipeline() {
         <p className="mt-6 max-w-[62ch] text-[0.95rem] leading-[1.75] text-ash">{c.intro}</p>
       </motion.header>
 
+      {/* ---- The chain, drawn end to end, before the stages detail it ---- */}
+      <Block item={item} title={c.architecture.title}>
+        <p className="mt-3 max-w-[58ch] text-[0.9rem] leading-[1.7] text-ash">
+          {c.architecture.note}
+        </p>
+
+        <div role="img" aria-label={flowLabel} className="mt-6">
+          {ARCHITECTURE.map((step, i) => {
+            const opensGroup = i === 0 || ARCHITECTURE[i - 1].group !== step.group
+            // The Trivy step is the only gate in the chain, so it is the only
+            // one carrying accent. Red stays reserved for the 3D scene.
+            const gate = step.group === 'security'
+
+            return (
+              <div key={step.key}>
+                {i > 0 ? <Connector /> : null}
+                <div className="flex items-start gap-3">
+                  <span aria-hidden="true" className="flex w-6 shrink-0 justify-center pt-[0.35rem]">
+                    <span
+                      className={`block h-[7px] w-[7px] border ${
+                        gate ? 'border-amber bg-amber' : 'border-mute'
+                      }`}
+                    />
+                  </span>
+                  <span className="min-w-0">
+                    {opensGroup ? (
+                      <span className={`legend block ${gate ? 'text-amber' : ''}`}>
+                        {c.architecture.groups[step.group]}
+                      </span>
+                    ) : null}
+                    <span
+                      className={`block font-mono text-[0.72rem] leading-[1.5] tracking-[0.06em] ${
+                        gate ? 'text-amber' : 'text-bone'
+                      } ${opensGroup ? 'mt-1.5' : ''}`}
+                    >
+                      {step.label}
+                    </span>
+                  </span>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </Block>
+
       {/* ---- The nine stages, one open at a time ---- */}
-      <motion.ul variants={item} className="mt-10 border-t border-rule">
+      <motion.ul variants={item} className="mt-14 border-t border-rule">
         {STAGES.map((spec, i) => {
           const open = stage === i
           const detail = c.stageDetail[spec.key]
@@ -185,6 +267,39 @@ export function Pipeline() {
             <p className="mt-3 max-w-[42ch] text-[0.9rem] leading-[1.7] text-ash">{c.status.next}</p>
           </div>
         </div>
+      </Block>
+
+      {/* ---- What was actually observed ---- */}
+      <Block item={item} title={c.proofs.title}>
+        <p className="mt-3 max-w-[58ch] text-[0.9rem] leading-[1.7] text-ash">{c.proofs.note}</p>
+        <ul className="mt-6 grid border-t border-rule sm:grid-cols-2 sm:gap-x-10">
+          {PROOFS.map((key) => {
+            const line = c.proofs.items[key]
+            if (!line) return null
+            return (
+              <li key={key} className="flex gap-3 border-b border-rule py-3">
+                <Tick />
+                <span className="text-[0.9rem] leading-[1.6] text-bone">{line}</span>
+              </li>
+            )
+          })}
+        </ul>
+
+        <a
+          href={REPO}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group mt-8 inline-flex items-baseline gap-2 font-mono text-[0.66rem] tracking-[0.18em] text-amber uppercase"
+        >
+          <span className="relative">
+            {c.repo}
+            <span
+              aria-hidden="true"
+              className="absolute -bottom-1 left-0 h-px w-0 bg-amber transition-[width] duration-300 ease-out group-hover:w-full group-focus-visible:w-full"
+            />
+          </span>
+          <span aria-hidden="true">↗</span>
+        </a>
       </Block>
     </motion.div>
   )

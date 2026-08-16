@@ -1,26 +1,45 @@
-import type { Lang, NodeId, PipelineStage, Project, SkillGroup } from './types'
+import type {
+  Certification,
+  Lang,
+  NodeId,
+  PipelineStage,
+  Project,
+  SkillGroup,
+} from './types'
 
 /**
  * Every word on the site lives here, in both languages, side by side so the
- * two never drift apart. Facts come from the CV, the DevOps Lab presentation
- * deck, and the public repositories — nothing is invented.
+ * two never drift apart.
+ *
+ * Facts come from the CV, the DevOps Lab presentation deck, and the public
+ * repositories. Nothing is invented — in particular the pipeline stages and the
+ * test count were read out of `devops-lap`'s Jenkinsfile and test file, not out
+ * of the slides.
  */
 
 export const IDENTITY = {
   name: 'Ibrahima Diallo',
-  email: 'ibrahimadiallo0899@gmail.com',
+  role: { fr: 'Junior DevOps / DevSecOps Engineer', en: 'Junior DevOps / DevSecOps Engineer' },
+  email: 'ibrahimadiallo1208@gmail.com',
   phone: '+221 76 881 59 72',
   phoneHref: '+221768815972',
-  city: 'Sangalcam, Dakar',
+  whatsapp: 'https://wa.me/221768815972',
+  whatsappPrefilled:
+    'https://wa.me/221768815972?text=Bonjour%20Ibrahima%2C%20je%20viens%20de%20voir%20votre%20portfolio.',
+  city: 'Sangalkam, Dakar',
+  postcode: '20000',
   country: { fr: 'Sénégal', en: 'Senegal' },
   github: 'https://github.com/brojalloo',
   githubHandle: 'brojalloo',
   linkedin: 'https://www.linkedin.com/in/ibrahima-diallo9147a6301',
-  /** Approximate, for the HUD coordinate readout. Sangalcam, Dakar region. */
+  cv: 'CV-Ibrahima-Diallo.pdf',
+  photo: 'img/ibrahima-diallo-640.jpg',
+  photo2x: 'img/ibrahima-diallo-1280.jpg',
+  /** Approximate, for the HUD coordinate readout. Sangalkam, Dakar region. */
   coords: '14.7889°N 17.2231°W',
 } as const
 
-/** The nine Jenkins stages, in execution order. */
+/** The nine Jenkins stages, in the order they appear in the Jenkinsfile. */
 export const STAGES: PipelineStage[] = [
   { key: 'checkout', label: 'CHECKOUT' },
   { key: 'install', label: 'INSTALL' },
@@ -33,13 +52,53 @@ export const STAGES: PipelineStage[] = [
   { key: 'health', label: 'HEALTH CHECK' },
 ]
 
+/** The tool chain, as it flows. Rendered as a vertical diagram. */
+export const ARCHITECTURE = [
+  { key: 'github', label: 'GitHub', group: 'source' },
+  { key: 'jenkins', label: 'Jenkins', group: 'ci' },
+  { key: 'tests', label: 'Tests Jest', group: 'ci' },
+  { key: 'sonarqube', label: 'SonarQube', group: 'quality' },
+  { key: 'quality', label: 'Quality Gate', group: 'quality' },
+  { key: 'build', label: 'Docker Build', group: 'build' },
+  { key: 'trivy', label: 'Trivy', group: 'security' },
+  { key: 'compose', label: 'Docker Compose', group: 'deploy' },
+  { key: 'app', label: 'API Node.js + PostgreSQL', group: 'deploy' },
+  { key: 'metrics', label: 'Prometheus / Grafana', group: 'observe' },
+  { key: 'sentry', label: 'Sentry', group: 'observe' },
+] as const
+
+/** Certifications, most recent first. Dates exactly as issued. */
+export const CERTIFICATIONS: Certification[] = [
+  { key: 'entrepreneurship', name: "Découvrir l'esprit d'entreprise", issuer: 'Cisco Networking Academy', date: '2025-09' },
+  { key: 'ccna2', name: 'CCNA 2', issuer: 'Cisco Networking Academy', date: null, featured: true },
+  { key: 'ai', name: 'Introduction to Modern AI', issuer: 'Cisco Networking Academy', date: '2025-08' },
+  { key: 'cyberthreat', name: 'Cybermenace : Contenu et Déroulement', issuer: 'Cisco Networking Academy', date: '2025-08' },
+  { key: 'ethicalhacker', name: 'Ethical Hacker', issuer: 'Cisco Networking Academy', date: '2025-08', featured: true },
+  { key: 'ccna1', name: 'CCNA 1 : Présentation des réseaux', issuer: 'Cisco Networking Academy', date: '2025-08', featured: true },
+  { key: 'introcyber', name: 'Introduction to Cyber Security', issuer: 'Cisco Networking Academy', date: '2024-12', featured: true },
+  { key: 'analyste', name: 'Analyste Junior en Cybersécurité', issuer: 'FORCE-N', date: '2024-12', featured: true },
+]
+
 export const PROJECTS: Project[] = [
   {
     key: 'devopsLab',
     name: 'DevOps Lab',
     repo: 'https://github.com/brojalloo/devops-lap',
-    stack: ['Node.js', 'Express', 'PostgreSQL', 'Jenkins', 'Docker', 'Terraform'],
+    stack: [
+      'Jenkins',
+      'Docker',
+      'Node.js',
+      'Express',
+      'PostgreSQL',
+      'SonarQube',
+      'Trivy',
+      'Prometheus',
+      'Grafana',
+      'Sentry',
+      'Terraform',
+    ],
     year: '2026',
+    featured: true,
     highlights: ['stages', 'gate', 'observability', 'secrets'],
   },
   {
@@ -50,6 +109,14 @@ export const PROJECTS: Project[] = [
     year: '2026',
     highlights: ['modules', 'architecture', 'licensing', 'packaging'],
   },
+  {
+    key: 'senRecrutement',
+    name: 'SENRecrutement',
+    repo: null,
+    stack: [],
+    year: '2024',
+    highlights: [],
+  },
 ]
 
 export const SKILL_GROUPS: SkillGroup[] = [
@@ -57,53 +124,105 @@ export const SKILL_GROUPS: SkillGroup[] = [
     key: 'cicd',
     items: [
       { name: 'Jenkins', note: 'pipeline' },
-      { name: 'Git / GitHub', note: 'versioning' },
+      { name: 'Git', note: 'versioning' },
+      { name: 'GitHub', note: 'remote' },
+    ],
+  },
+  {
+    key: 'containers',
+    items: [
       { name: 'Docker', note: 'images' },
       { name: 'Docker Compose', note: 'orchestration' },
     ],
   },
   {
-    key: 'security',
+    key: 'devsecops',
     items: [
-      { name: 'Trivy', note: 'CVE scan' },
       { name: 'SonarQube', note: 'quality gate' },
-      { name: 'Jenkins Credentials', note: 'secrets' },
-      { name: 'Réseau / TCP-IP', note: 'fundamentals' },
+      { name: 'Trivy', note: 'CVE scan' },
+      { name: 'Sentry', note: 'errors' },
     ],
   },
   {
-    key: 'observability',
+    key: 'monitoring',
     items: [
       { name: 'Prometheus', note: 'metrics' },
       { name: 'Grafana', note: 'dashboards' },
       { name: 'Node Exporter', note: 'host' },
       { name: 'cAdvisor', note: 'containers' },
-      { name: 'Sentry', note: 'errors' },
     ],
   },
   {
-    key: 'build',
+    key: 'infra',
+    items: [
+      { name: 'Terraform', note: 'IaC' },
+      { name: 'Linux', note: 'système' },
+    ],
+  },
+  {
+    key: 'networks',
+    items: [
+      { name: 'Réseaux informatiques' },
+      { name: 'CCNA 1', note: 'Cisco' },
+      { name: 'CCNA 2', note: 'Cisco' },
+    ],
+  },
+  {
+    key: 'security',
+    items: [
+      { name: 'Ethical Hacker', note: 'Cisco' },
+      { name: 'Introduction to Cyber Security', note: 'Cisco' },
+      { name: 'Analyste Junior', note: 'FORCE-N' },
+    ],
+  },
+  {
+    key: 'backend',
     items: [
       { name: 'Node.js / Express', note: 'API' },
-      { name: 'Java / JavaFX', note: 'desktop' },
+      { name: 'Java', note: 'desktop' },
       { name: 'Python', note: 'scripting' },
-      { name: 'PostgreSQL / SQLite', note: 'data' },
-      { name: 'Terraform', note: 'IaC' },
+      { name: 'PHP' },
+      { name: 'HTML / CSS' },
     ],
+  },
+  {
+    key: 'data',
+    items: [
+      { name: 'PostgreSQL' },
+      { name: 'SQLite' },
+    ],
+  },
+  {
+    key: 'office',
+    items: [{ name: 'Excel' }, { name: 'Word' }, { name: 'PowerPoint' }],
   },
 ]
 
-/** Ordered most recent first. */
+/** Studies and work, most recent first. */
 export const TIMELINE = [
-  { key: 'l2cyber', period: 'oct. 2024 →', place: 'Institut Supérieur d’Informatique, Keur Massar', kind: 'study' },
-  { key: 'certCisco', period: 'déc. 2024', place: 'Cisco Networking Academy', kind: 'cert' },
-  { key: 'certForceN', period: 'déc. 2024', place: 'FORCE-N', kind: 'cert' },
-  { key: 'l1cyber', period: '2023 — 2024', place: 'Université Numérique Cheikh Hamidou Kane', kind: 'study' },
-  { key: 'l3aes', period: '2022 — 2023', place: 'Université Numérique Cheikh Hamidou Kane', kind: 'study' },
+  { key: 'master1', period: 'mai 2025 →', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
+  { key: 'l2cyber', period: 'oct. 2024 — juil. 2025', place: "Institut Supérieur d'Informatique, Keur Massar", kind: 'study' },
+  { key: 'l1cyber', period: 'nov. 2023 — juil. 2024', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
+  { key: 'l3eco', period: 'sept. 2022 — juil. 2023', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
   { key: 'stage', period: '2022 — 2023', place: 'Grossiste, Rufisque', kind: 'work' },
-  { key: 'l2aes', period: '2021 — 2022', place: 'Institut Supérieur d’Informatique, Keur Massar', kind: 'study' },
-  { key: 'assoc', period: '2021 — 2023', place: 'Association des jeunes de Sangalkam', kind: 'work' },
-  { key: 'bac', period: '2019 — 2020', place: 'Lycée de Sangalcam, Rufisque', kind: 'study' },
+  { key: 'l2aes', period: 'sept. 2021 — juil. 2022', place: "Institut Supérieur d'Informatique, Keur Massar", kind: 'study' },
+  { key: 'l1aes', period: 'janv. 2021 — août 2021', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
+  { key: 'bac', period: 'oct. 2019 — sept. 2020', place: 'Lycée de Sangalkam, Rufisque', kind: 'study' },
+] as const
+
+/** Results actually observed. Nothing here is aspirational. */
+export const PROOFS = [
+  'jenkins',
+  'tests',
+  'sonar',
+  'trivy',
+  'docker',
+  'prometheus',
+  'grafana',
+  'nodeexporter',
+  'cadvisor',
+  'sentry',
+  'terraform',
 ] as const
 
 // ---------------------------------------------------------------------------
@@ -118,9 +237,9 @@ const fr = {
   hud: {
     location: 'Position',
     session: 'Session',
-    nodes: 'Nœuds',
-    back: 'Retour à la vue d’ensemble',
-    backShort: 'Vue d’ensemble',
+    nodes: 'Sections',
+    back: "Retour à la vue d'ensemble",
+    backShort: "Vue d'ensemble",
     escape: 'Échap pour revenir',
     drag: 'Glisser pour tourner · Cliquer un nœud pour ouvrir',
     lang: 'English',
@@ -128,80 +247,122 @@ const fr = {
     close: 'Fermer le panneau',
   },
   hero: {
-    role: 'Cybersécurité & DevSecOps',
+    role: 'Junior DevOps / DevSecOps Engineer',
+    keywords: 'CI/CD · Docker · Linux · Cybersécurité · Monitoring · Terraform',
     tagline:
-      'J’ai construit, automatisé, sécurisé et observé une API de bout en bout. Voici la machine.',
+      'Je construis des environnements DevOps pratiques autour de la CI/CD, de la sécurité, du monitoring et de l’automatisation.',
   },
   nodes: {
-    whoami: { title: 'Profil', legend: 'whoami' },
-    pipeline: { title: 'Le pipeline', legend: 'pipeline' },
-    arsenal: { title: 'Compétences', legend: 'arsenal' },
+    whoami: { title: 'À propos', legend: 'whoami' },
+    arsenal: { title: 'Compétences', legend: 'skills' },
+    certifications: { title: 'Certifications', legend: 'certs' },
+    projets: { title: 'Projets', legend: 'projects' },
+    pipeline: { title: 'DevOps Lab', legend: 'devops-lab' },
     parcours: { title: 'Parcours', legend: 'parcours' },
-    projets: { title: 'Projets', legend: 'projets' },
     contact: { title: 'Contact', legend: 'contact' },
   } satisfies Record<NodeId, { title: string; legend: string }>,
 
   whoami: {
-    kicker: 'Étudiant en cybersécurité, Dakar',
-    heading: 'Je viens des sciences sociales. J’en ai gardé l’habitude de comprendre un système avant de le toucher.',
+    kicker: 'Junior DevOps / DevSecOps · Dakar',
+    heading:
+      'Je viens de l’économie. J’en ai gardé l’habitude de comprendre un système avant de le toucher.',
+    photoAlt: 'Ibrahima Diallo, portrait professionnel',
     body: [
-      'J’ai commencé par une licence en Administration Économique et Sociale. Trois ans à analyser des organisations, à chercher pourquoi elles cassent. En 2023 j’ai basculé en cybersécurité, et la question est restée exactement la même — seuls les systèmes ont changé.',
-      'Depuis, je construis. Un laboratoire DevOps complet, avec sa chaîne de livraison, ses portes de sécurité et son monitoring. Un logiciel de gestion pour les commerçants, livré en application installable. Je n’apprends pas les outils dans le vide : je les mets en production sur mes propres projets jusqu’à ce qu’ils tiennent.',
-      'Je suis basé à Sangalcam, dans la région de Dakar, et je cherche une alternance ou un stage en sécurité opérationnelle, DevSecOps ou administration d’infrastructure.',
+      'Je suis étudiant en Master 1 d’Économie de l’environnement et du développement durable, après deux années de licence en cybersécurité. Ce parcours en apparence décousu a une logique : trois ans à analyser des organisations m’ont appris à chercher pourquoi un système casse. Depuis 2023, les systèmes que j’analyse sont techniques.',
+      'Je développe mes compétences en DevOps, DevSecOps, automatisation, conteneurs, CI/CD, monitoring et Infrastructure as Code à travers des projets pratiques et des laboratoires techniques. Je n’apprends pas les outils dans le vide : je les mets en service sur mes propres projets jusqu’à ce qu’ils tiennent.',
+      'Mon laboratoire DevOps couvre la chaîne complète — build, tests, analyse qualité, portes de sécurité, déploiement, monitoring et observabilité. Mon second projet est un logiciel de gestion livré en application installable pour des commerçants.',
+      'Je cherche une alternance ou un stage en DevOps, DevSecOps, cloud, infrastructure ou administration système, à Dakar ou à distance.',
     ],
     facts: [
-      { label: 'Formation', value: 'Licence 2 Cybersécurité' },
-      { label: 'Base', value: 'Sangalcam, Dakar' },
+      { label: 'Poste visé', value: 'Junior DevOps / DevSecOps' },
+      { label: 'Formation', value: "Master 1 Économie de l'environnement" },
+      { label: 'Base', value: 'Sangalkam, Dakar' },
       { label: 'Langues', value: 'Français, Anglais' },
-      { label: 'Recherche', value: 'Alternance / stage' },
     ],
+    path: {
+      title: 'Une progression, pas une hésitation',
+      steps: ['Économie', 'Cybersécurité', 'Réseaux', 'Développement', 'DevOps', 'DevSecOps / Cloud'],
+      note:
+        'Chaque étape a laissé quelque chose : l’économie l’analyse des systèmes, la cybersécurité le réflexe de la menace, les réseaux les fondations, le développement la pratique du code. Le DevOps est l’endroit où tout cela sert en même temps.',
+    },
   },
 
   pipeline: {
     kicker: 'Projet principal · devops-lap',
-    heading: 'Neuf étapes entre un commit et la production. Deux d’entre elles ont le droit de tout arrêter.',
+    heading:
+      'Neuf étapes entre un commit et la production. Deux d’entre elles ont le droit de tout arrêter.',
     intro:
-      'Le DevOps Lab est une API Node.js/Express avec PostgreSQL, livrée par un pipeline Jenkins que j’ai écrit et exécuté de bout en bout. Cliquez une étape pour voir ce qu’elle fait.',
+      'Laboratoire DevOps complet permettant d’automatiser le build, les tests, l’analyse qualité, la sécurité, le déploiement, le monitoring et l’observabilité d’une API Node.js/PostgreSQL. Cliquez une étape pour voir ce qu’elle fait.',
     gateNote:
-      'Trivy scanne l’image après sa construction avec --severity CRITICAL --exit-code 1. Une vulnérabilité critique fait échouer le build : rien ne part en production.',
+      'Trivy scanne l’image après sa construction avec --severity CRITICAL --exit-code 1. Une vulnérabilité critique fait échouer le build : rien ne part en production.',
     stageDetail: {
       checkout: {
         title: 'Checkout',
-        body: 'Jenkins récupère le dépôt Git. Le Jenkinsfile est versionné avec le code, donc le pipeline évolue en même temps que l’application.',
+        body: 'Récupération automatique du code depuis GitHub. Le Jenkinsfile est versionné avec l’application, donc le pipeline évolue en même temps qu’elle.',
       },
       install: {
         title: 'Install',
-        body: 'npm ci plutôt que npm install : l’installation suit le package-lock.json à la lettre et repart d’un node_modules vide. Deux builds du même commit donnent exactement le même arbre de dépendances.',
+        body: 'npm ci plutôt que npm install : l’installation suit le package-lock.json à la lettre et repart d’un node_modules vide. Deux builds du même commit donnent le même arbre de dépendances.',
       },
       test: {
         title: 'Test',
-        body: 'npm test exécute la suite de tests automatisés de l’API. Un test rouge arrête le pipeline avant même l’analyse de qualité.',
+        body: 'Exécution des tests Jest avant toute livraison. Cinq tests couvrent /health, la route racine, /db-health, la lecture et la création de produits. Un test rouge arrête le pipeline avant l’analyse qualité.',
       },
       sonar: {
-        title: 'SonarQube',
-        body: 'Analyse statique du code : bugs, code smells, duplication, dette technique. SonarQube tourne en conteneur dans le compose.yml du projet.',
+        title: 'SonarQube Analysis',
+        body: 'Analyse de la qualité et de la dette technique : bugs, code smells, duplication. SonarQube tourne en conteneur dans le compose.yml du projet, sous la clé DevOps-Lab-API.',
       },
       gate: {
         title: 'Quality Gate',
-        body: 'La porte de qualité. Si le code passe sous le seuil défini, le pipeline s’arrête ici. C’est la différence entre mesurer la qualité et l’imposer.',
+        body: 'La porte de qualité, en mode bloquant (abortPipeline). Si le code passe sous le seuil, le pipeline s’arrête ici. C’est la différence entre mesurer la qualité et l’imposer.',
       },
       build: {
         title: 'Docker Build',
         body: 'Construction de l’image applicative depuis app/Dockerfile. À partir d’ici, ce qui circule dans le pipeline est un artefact, plus du code source.',
       },
       trivy: {
-        title: 'Trivy — Security Gate',
-        body: 'Scan de vulnérabilités sur l’image construite. Le rapport JSON est archivé dans Jenkins. Le flag --exit-code 1 sur les CRITICAL transforme un rapport en blocage : la faille ne peut pas atteindre la production.',
+        title: 'Trivy Security Scan',
+        body: 'Analyse des vulnérabilités de l’image Docker. Le rapport JSON est archivé dans Jenkins, puis un second passage sur les CRITICAL avec --exit-code 1 transforme le rapport en blocage : la faille ne peut pas atteindre la production.',
       },
       deploy: {
         title: 'Deploy',
-        body: 'Docker Compose redéploie l’API et sa base. La DSN Sentry est injectée à cet instant par withCredentials, jamais écrite dans un fichier du dépôt.',
+        body: 'Déploiement avec Docker Compose. La DSN Sentry est injectée à cet instant par withCredentials, jamais écrite dans un fichier du dépôt.',
       },
       health: {
         title: 'Health Check',
-        body: 'Vérification de /health et /db-health. Le pipeline ne se déclare pas réussi parce qu’il a fini : il se déclare réussi parce que l’application répond.',
+        body: 'Vérification de l’API et de PostgreSQL, par curl sur /health et /db-health. Le pipeline ne se déclare pas réussi parce qu’il a fini, mais parce que l’application répond.',
       },
     } as Record<string, { title: string; body: string }>,
+    architecture: {
+      title: 'Architecture de la chaîne',
+      note: 'Du dépôt jusqu’aux tableaux de bord, chaque brique passe la main à la suivante.',
+      groups: {
+        source: 'Source',
+        ci: 'Intégration',
+        quality: 'Qualité',
+        build: 'Artefact',
+        security: 'Sécurité',
+        deploy: 'Livraison',
+        observe: 'Observabilité',
+      } as Record<string, string>,
+    },
+    proofs: {
+      title: 'Résultats obtenus',
+      note: 'Ce qui a réellement été exécuté et vérifié en local.',
+      items: {
+        jenkins: 'Pipeline Jenkins : SUCCESS',
+        tests: 'Tests Jest : 5/5 passés',
+        sonar: 'SonarQube : Quality Gate validé',
+        trivy: 'Trivy : Security Gate CRITICAL actif',
+        docker: 'Docker : image construite',
+        prometheus: 'Prometheus : API monitorée',
+        grafana: 'Grafana : dashboards actifs',
+        nodeexporter: 'Node Exporter : métriques système',
+        cadvisor: 'cAdvisor : métriques Docker',
+        sentry: 'Sentry : erreur capturée',
+        terraform: 'Terraform : init + validate réussis',
+      } as Record<string, string>,
+    },
     api: {
       title: 'Surface de l’API',
       rows: [
@@ -224,7 +385,7 @@ const fr = {
       ],
     },
     observability: {
-      title: 'Ce que je regarde une fois déployé',
+      title: 'Ce que je surveille une fois déployé',
       rows: [
         { k: 'HTTP', v: 'Nombre de requêtes, durée, codes 4xx et 5xx' },
         { k: 'Hôte', v: 'CPU et mémoire, via Node Exporter' },
@@ -233,40 +394,60 @@ const fr = {
         { k: 'Erreurs', v: 'Exceptions applicatives centralisées dans Sentry' },
       ],
       note:
-        'Prometheus collecte, Grafana dessine, Sentry raconte. Une métrique dit que le taux d’erreur monte ; Sentry dit quelle ligne de code en est responsable.',
+        'Prometheus collecte, Grafana dessine, Sentry explique. Une métrique dit que le taux d’erreur monte ; Sentry dit quelle ligne de code en est responsable.',
     },
     status: {
       title: 'État réel du projet',
-      done: 'Validé en local : pipeline Jenkins complet, Quality Gate, scan Trivy, dashboards Grafana, événement Sentry reçu, Terraform initialisé et validé.',
-      next: 'Prochaine phase : provisionner deux VPS avec Terraform, réseau et accès SSH, puis y porter la chaîne complète.',
+      done: 'Validé en local : pipeline Jenkins complet, Quality Gate, scan Trivy, dashboards Grafana, événement Sentry reçu, Terraform initialisé et validé.',
+      next: 'Prochaine phase : provisionner deux VPS avec Terraform, réseau et accès SSH, puis y porter la chaîne complète.',
       doneLabel: 'Fait',
       nextLabel: 'En cours',
     },
+    repo: 'Voir le dépôt sur GitHub',
   },
 
   arsenal: {
     kicker: 'Outils que j’ai réellement exécutés',
     heading: 'Chaque outil ci-dessous tourne dans un projet que vous pouvez ouvrir sur GitHub.',
+    note:
+      'Les compétences DevOps viennent du laboratoire que j’ai construit et exécuté, pas d’une liste de lecture.',
     groups: {
-      cicd: 'Livraison continue',
-      security: 'Sécurité',
-      observability: 'Observabilité',
-      build: 'Développement',
+      cicd: 'CI/CD',
+      containers: 'Conteneurs',
+      devsecops: 'DevSecOps',
+      monitoring: 'Monitoring & observabilité',
+      infra: 'Infrastructure',
+      networks: 'Réseaux',
+      security: 'Cybersécurité',
+      backend: 'Développement',
+      data: 'Bases de données',
+      office: 'Bureautique',
     } as Record<string, string>,
   },
 
+  certifications: {
+    kicker: 'Cisco Networking Academy · FORCE-N',
+    heading: 'Huit certifications, dont cinq en réseaux et sécurité.',
+    note:
+      'Aucune date n’est indiquée pour le CCNA 2 : la formation est terminée, mais je préfère ne rien afficher que je ne puisse justifier.',
+    completed: 'Terminé',
+    featuredLabel: 'À retenir',
+    count: 'certifications',
+  },
+
   parcours: {
-    kicker: 'Formation, certifications, engagements',
-    heading: 'Un virage à 2023, et rien d’effacé avant.',
+    kicker: 'Formation et expérience',
+    heading: 'Un virage en 2023, et rien d’effacé avant.',
+    studiesTitle: 'Formation',
+    workTitle: 'Expérience professionnelle',
     entries: {
-      l2cyber: 'Licence 2 — Cybersécurité',
-      certCisco: 'Introduction to Cyber Security',
-      certForceN: 'Analyste Junior en Cybersécurité',
-      l1cyber: 'Licence 1 — Cybersécurité',
-      l3aes: 'Licence 3 — Administration Économique et Sociale',
-      stage: 'Chargé de clientèle — stage',
+      master1: 'Master 1 — Économie de l’environnement et du développement durable',
+      l2cyber: 'Licence 2 — Cyber Security',
+      l1cyber: 'Licence 1 — Cyber Security',
+      l3eco: 'Licence 3 — Économie Appliquée',
+      stage: 'Chargé de clientèle',
       l2aes: 'Licence 2 — Administration Économique et Sociale',
-      assoc: 'Membre du bureau — association de jeunes',
+      l1aes: 'Licence 1 — Administration Économique et Sociale',
       bac: 'Baccalauréat — sciences humaines et sociales',
     } as Record<string, string>,
     kinds: { study: 'Formation', cert: 'Certification', work: 'Expérience' } as Record<string, string>,
@@ -274,21 +455,24 @@ const fr = {
 
   projets: {
     kicker: `github.com/${IDENTITY.githubHandle}`,
-    heading: 'Deux projets, deux métiers : tenir une infrastructure, et livrer un produit.',
+    heading: 'Trois projets : tenir une infrastructure, livrer un produit, apprendre le web.',
     open: 'Voir le dépôt',
+    noRepo: 'Projet académique — dépôt non publié',
+    featuredLabel: 'Projet principal',
+    all: 'Voir tous mes projets GitHub',
     devopsLab: {
       summary:
-        'Une API Node.js/Express avec PostgreSQL, livrée par un pipeline Jenkins de neuf étapes. Le dépôt contient le Jenkinsfile, le Dockerfile, le compose.yml, la configuration SonarQube et les tests.',
+        'Laboratoire DevOps complet permettant d’automatiser le build, les tests, l’analyse qualité, la sécurité, le déploiement, le monitoring et l’observabilité d’une API Node.js/PostgreSQL.',
       highlights: {
-        stages: 'Pipeline Jenkins complet, du checkout au health check',
-        gate: 'Quality Gate SonarQube et scan Trivy bloquants',
+        stages: 'Pipeline Jenkins de neuf étapes, du checkout au health check',
+        gate: 'Quality Gate SonarQube et scan Trivy tous deux bloquants',
         observability: 'Prometheus, Grafana, Node Exporter, cAdvisor et Sentry',
         secrets: 'Secrets injectés par credential Jenkins, jamais commités',
       } as Record<string, string>,
     },
     tekkiPro: {
       summary:
-        'Un logiciel de gestion de boutique pour commerçants, en Java 21 et JavaFX, avec base SQLite locale. Environ 266 Ko de code source, livré en version portable Windows qui se lance sans installation.',
+        'Logiciel de gestion de boutique pour commerçants, en Java 21 et JavaFX, avec base SQLite locale. Environ 266 Ko de code source, livré en version portable Windows qui se lance sans installation.',
       highlights: {
         modules: 'Tableau de bord, stock avec alertes, facturation, dettes, rapports',
         architecture: 'Séparation models / dao / views / config, accès aux données isolé',
@@ -296,21 +480,29 @@ const fr = {
         packaging: 'Version portable Windows, base créée au premier lancement',
       } as Record<string, string>,
     },
+    senRecrutement: {
+      summary:
+        'Projet académique de création d’un site de recrutement en ligne, réalisé dans le cadre de mon cursus en cybersécurité.',
+      highlights: {} as Record<string, string>,
+    },
   },
 
   contact: {
     kicker: 'Disponible pour une alternance ou un stage',
-    heading: 'Écrivez-moi. Je réponds vite.',
+    heading:
+      'Vous souhaitez échanger sur un projet ou une opportunité ? Contactez-moi.',
     body:
-      'Sécurité opérationnelle, DevSecOps, administration d’infrastructure — à Dakar ou à distance. Si vous voulez voir le laboratoire tourner en direct, je peux faire la démonstration en une vingtaine de minutes.',
+      'DevOps, DevSecOps, cloud, infrastructure ou administration système — à Dakar ou à distance. Si vous voulez voir le laboratoire tourner en direct, je peux en faire la démonstration en une vingtaine de minutes.',
     labels: {
       email: 'E-mail',
       phone: 'Téléphone',
+      whatsapp: 'WhatsApp',
       location: 'Localisation',
       github: 'GitHub',
       linkedin: 'LinkedIn',
     },
-    cv: 'Télécharger le CV',
+    whatsappCta: 'Me contacter sur WhatsApp',
+    cv: 'Télécharger mon CV',
     copy: 'Copier',
     copied: 'Copié',
   },
@@ -333,7 +525,7 @@ const en: Content = {
   hud: {
     location: 'Position',
     session: 'Session',
-    nodes: 'Nodes',
+    nodes: 'Sections',
     back: 'Back to overview',
     backShort: 'Overview',
     escape: 'Esc to go back',
@@ -343,45 +535,56 @@ const en: Content = {
     close: 'Close panel',
   },
   hero: {
-    role: 'Cybersecurity & DevSecOps',
-    tagline: 'I built, automated, secured and observed an API end to end. Here is the machine.',
+    role: 'Junior DevOps / DevSecOps Engineer',
+    keywords: 'CI/CD · Docker · Linux · Cybersecurity · Monitoring · Terraform',
+    tagline:
+      'I build practical DevOps environments around CI/CD, security, monitoring and automation.',
   },
   nodes: {
-    whoami: { title: 'Profile', legend: 'whoami' },
-    pipeline: { title: 'The pipeline', legend: 'pipeline' },
-    arsenal: { title: 'Skills', legend: 'arsenal' },
-    parcours: { title: 'Path', legend: 'path' },
+    whoami: { title: 'About', legend: 'whoami' },
+    arsenal: { title: 'Skills', legend: 'skills' },
+    certifications: { title: 'Certifications', legend: 'certs' },
     projets: { title: 'Projects', legend: 'projects' },
+    pipeline: { title: 'DevOps Lab', legend: 'devops-lab' },
+    parcours: { title: 'Background', legend: 'background' },
     contact: { title: 'Contact', legend: 'contact' },
   },
 
   whoami: {
-    kicker: 'Cybersecurity student, Dakar',
-    heading: 'I came from social science. It left me with the habit of understanding a system before touching it.',
+    kicker: 'Junior DevOps / DevSecOps · Dakar',
+    heading: 'I came from economics. It left me with the habit of understanding a system before touching it.',
+    photoAlt: 'Ibrahima Diallo, professional portrait',
     body: [
-      'I started with a degree in Economic and Social Administration. Three years analysing organisations, looking for why they break. In 2023 I moved into cybersecurity, and the question stayed exactly the same — only the systems changed.',
-      'Since then I build. A full DevOps lab, with its delivery chain, its security gates and its monitoring. A management application for shopkeepers, shipped as an installable program. I do not learn tools in the abstract: I run them on my own projects until they hold.',
-      'I am based in Sangalcam, in the Dakar region, and I am looking for an apprenticeship or internship in security operations, DevSecOps or infrastructure administration.',
+      'I am a first-year Master’s student in Environmental Economics and Sustainable Development, after two years of undergraduate study in cybersecurity. That path looks scattered but it has a logic: three years analysing organisations taught me to look for why a system breaks. Since 2023 the systems I analyse have been technical ones.',
+      'I am building skills in DevOps, DevSecOps, automation, containers, CI/CD, monitoring and Infrastructure as Code through practical projects and technical labs. I do not learn tools in the abstract: I run them on my own projects until they hold.',
+      'My DevOps lab covers the full chain — build, tests, quality analysis, security gates, deployment, monitoring and observability. My second project is management software shipped as an installable application for shopkeepers.',
+      'I am looking for an apprenticeship or internship in DevOps, DevSecOps, cloud, infrastructure or systems administration, in Dakar or remote.',
     ],
     facts: [
-      { label: 'Studying', value: 'BSc year 2, Cybersecurity' },
-      { label: 'Based in', value: 'Sangalcam, Dakar' },
+      { label: 'Target role', value: 'Junior DevOps / DevSecOps' },
+      { label: 'Studying', value: 'MSc year 1, Environmental Economics' },
+      { label: 'Based in', value: 'Sangalkam, Dakar' },
       { label: 'Languages', value: 'French, English' },
-      { label: 'Looking for', value: 'Apprenticeship / internship' },
     ],
+    path: {
+      title: 'A progression, not a hesitation',
+      steps: ['Economics', 'Cybersecurity', 'Networks', 'Development', 'DevOps', 'DevSecOps / Cloud'],
+      note:
+        'Each step left something behind: economics the analysis of systems, cybersecurity the instinct for threat, networks the foundations, development the practice of code. DevOps is where all of it is useful at once.',
+    },
   },
 
   pipeline: {
     kicker: 'Main project · devops-lap',
     heading: 'Nine stages between a commit and production. Two of them are allowed to stop everything.',
     intro:
-      'The DevOps Lab is a Node.js/Express API with PostgreSQL, delivered by a Jenkins pipeline I wrote and ran end to end. Click a stage to see what it does.',
+      'A complete DevOps lab automating the build, tests, quality analysis, security, deployment, monitoring and observability of a Node.js/PostgreSQL API. Click a stage to see what it does.',
     gateNote:
       'Trivy scans the image after it is built, with --severity CRITICAL --exit-code 1. A critical vulnerability fails the build: nothing reaches production.',
     stageDetail: {
       checkout: {
         title: 'Checkout',
-        body: 'Jenkins pulls the Git repository. The Jenkinsfile is versioned with the code, so the pipeline evolves alongside the application.',
+        body: 'The code is pulled automatically from GitHub. The Jenkinsfile is versioned with the application, so the pipeline evolves alongside it.',
       },
       install: {
         title: 'Install',
@@ -389,31 +592,61 @@ const en: Content = {
       },
       test: {
         title: 'Test',
-        body: 'npm test runs the API test suite. A failing test stops the pipeline before quality analysis even begins.',
+        body: 'Jest tests run before any delivery. Five tests cover /health, the root route, /db-health, reading products and creating one. A failing test stops the pipeline before quality analysis.',
       },
       sonar: {
-        title: 'SonarQube',
-        body: 'Static analysis of the code: bugs, code smells, duplication, technical debt. SonarQube runs as a container in the project compose.yml.',
+        title: 'SonarQube Analysis',
+        body: 'Quality and technical debt analysis: bugs, code smells, duplication. SonarQube runs as a container in the project compose.yml, under the key DevOps-Lab-API.',
       },
       gate: {
         title: 'Quality Gate',
-        body: 'The quality gate. If the code falls below the defined threshold, the pipeline stops here. That is the difference between measuring quality and enforcing it.',
+        body: 'The quality gate, in blocking mode (abortPipeline). If the code falls below the threshold, the pipeline stops here. That is the difference between measuring quality and enforcing it.',
       },
       build: {
         title: 'Docker Build',
         body: 'The application image is built from app/Dockerfile. From here on, what moves through the pipeline is an artifact, not source code.',
       },
       trivy: {
-        title: 'Trivy — Security Gate',
-        body: 'Vulnerability scan on the built image. The JSON report is archived in Jenkins. The --exit-code 1 flag on CRITICAL findings turns a report into a block: the flaw cannot reach production.',
+        title: 'Trivy Security Scan',
+        body: 'Vulnerability scan of the Docker image. The JSON report is archived in Jenkins, then a second pass on CRITICAL findings with --exit-code 1 turns the report into a block: the flaw cannot reach production.',
       },
       deploy: {
         title: 'Deploy',
-        body: 'Docker Compose redeploys the API and its database. The Sentry DSN is injected at this moment by withCredentials, never written into a file in the repository.',
+        body: 'Deployment with Docker Compose. The Sentry DSN is injected at this moment by withCredentials, never written into a file in the repository.',
       },
       health: {
         title: 'Health Check',
-        body: 'Checks /health and /db-health. The pipeline does not call itself successful because it finished: it calls itself successful because the application answers.',
+        body: 'The API and PostgreSQL are checked by curl on /health and /db-health. The pipeline does not call itself successful because it finished, but because the application answers.',
+      },
+    },
+    architecture: {
+      title: 'Chain architecture',
+      note: 'From the repository through to the dashboards, each piece hands off to the next.',
+      groups: {
+        source: 'Source',
+        ci: 'Integration',
+        quality: 'Quality',
+        build: 'Artifact',
+        security: 'Security',
+        deploy: 'Delivery',
+        observe: 'Observability',
+      },
+    },
+    proofs: {
+      title: 'Results obtained',
+      note: 'What was actually run and verified locally.',
+      items: {
+        jenkins: 'Jenkins pipeline: SUCCESS',
+        tests: 'Jest tests: 5/5 passing',
+        sonar: 'SonarQube: Quality Gate passed',
+        trivy: 'Trivy: CRITICAL security gate active',
+        docker: 'Docker: image built',
+        prometheus: 'Prometheus: API monitored',
+        grafana: 'Grafana: dashboards live',
+        nodeexporter: 'Node Exporter: host metrics',
+        cadvisor: 'cAdvisor: Docker metrics',
+        sentry: 'Sentry: error captured',
+        terraform: 'Terraform: init + validate successful',
       },
     },
     api: {
@@ -456,31 +689,50 @@ const en: Content = {
       doneLabel: 'Done',
       nextLabel: 'In progress',
     },
+    repo: 'View the repository on GitHub',
   },
 
   arsenal: {
     kicker: 'Tools I have actually run',
     heading: 'Every tool below runs in a project you can open on GitHub.',
+    note: 'The DevOps skills come from the lab I built and ran, not from a reading list.',
     groups: {
-      cicd: 'Continuous delivery',
-      security: 'Security',
-      observability: 'Observability',
-      build: 'Development',
+      cicd: 'CI/CD',
+      containers: 'Containers',
+      devsecops: 'DevSecOps',
+      monitoring: 'Monitoring & observability',
+      infra: 'Infrastructure',
+      networks: 'Networking',
+      security: 'Cybersecurity',
+      backend: 'Development',
+      data: 'Databases',
+      office: 'Office',
     },
   },
 
+  certifications: {
+    kicker: 'Cisco Networking Academy · FORCE-N',
+    heading: 'Eight certifications, five of them in networking and security.',
+    note:
+      'No date is shown for CCNA 2: the course is complete, but I would rather show nothing than something I cannot evidence.',
+    completed: 'Completed',
+    featuredLabel: 'Key ones',
+    count: 'certifications',
+  },
+
   parcours: {
-    kicker: 'Studies, certifications, involvement',
+    kicker: 'Studies and experience',
     heading: 'A turn in 2023, and nothing erased before it.',
+    studiesTitle: 'Studies',
+    workTitle: 'Professional experience',
     entries: {
-      l2cyber: 'Year 2 — Cybersecurity',
-      certCisco: 'Introduction to Cyber Security',
-      certForceN: 'Junior Cybersecurity Analyst',
-      l1cyber: 'Year 1 — Cybersecurity',
-      l3aes: 'Year 3 — Economic and Social Administration',
-      stage: 'Account handler — internship',
+      master1: 'MSc year 1 — Environmental Economics and Sustainable Development',
+      l2cyber: 'Year 2 — Cyber Security',
+      l1cyber: 'Year 1 — Cyber Security',
+      l3eco: 'Year 3 — Applied Economics',
+      stage: 'Account handler',
       l2aes: 'Year 2 — Economic and Social Administration',
-      assoc: 'Board member — youth association',
+      l1aes: 'Year 1 — Economic and Social Administration',
       bac: 'Baccalaureate — humanities and social sciences',
     },
     kinds: { study: 'Studies', cert: 'Certification', work: 'Experience' },
@@ -488,14 +740,17 @@ const en: Content = {
 
   projets: {
     kicker: `github.com/${IDENTITY.githubHandle}`,
-    heading: 'Two projects, two jobs: keeping infrastructure alive, and shipping a product.',
+    heading: 'Three projects: keeping infrastructure alive, shipping a product, learning the web.',
     open: 'View repository',
+    noRepo: 'Academic project — repository not published',
+    featuredLabel: 'Main project',
+    all: 'See all my GitHub projects',
     devopsLab: {
       summary:
-        'A Node.js/Express API with PostgreSQL, delivered by a nine-stage Jenkins pipeline. The repository holds the Jenkinsfile, the Dockerfile, the compose.yml, the SonarQube configuration and the tests.',
+        'A complete DevOps lab automating the build, tests, quality analysis, security, deployment, monitoring and observability of a Node.js/PostgreSQL API.',
       highlights: {
-        stages: 'Full Jenkins pipeline, checkout through health check',
-        gate: 'Blocking SonarQube Quality Gate and Trivy scan',
+        stages: 'Nine-stage Jenkins pipeline, checkout through health check',
+        gate: 'SonarQube Quality Gate and Trivy scan, both blocking',
         observability: 'Prometheus, Grafana, Node Exporter, cAdvisor and Sentry',
         secrets: 'Secrets injected by Jenkins credential, never committed',
       },
@@ -510,21 +765,28 @@ const en: Content = {
         packaging: 'Portable Windows build, database created on first launch',
       },
     },
+    senRecrutement: {
+      summary:
+        'An academic project building an online recruitment site, produced as part of my cybersecurity coursework.',
+      highlights: {},
+    },
   },
 
   contact: {
     kicker: 'Available for an apprenticeship or internship',
-    heading: 'Write to me. I answer quickly.',
+    heading: 'Want to talk about a project or an opportunity? Get in touch.',
     body:
-      'Security operations, DevSecOps, infrastructure administration — in Dakar or remote. If you want to see the lab running live, I can walk through it in about twenty minutes.',
+      'DevOps, DevSecOps, cloud, infrastructure or systems administration — in Dakar or remote. If you want to see the lab running live, I can walk through it in about twenty minutes.',
     labels: {
       email: 'Email',
       phone: 'Phone',
+      whatsapp: 'WhatsApp',
       location: 'Location',
       github: 'GitHub',
       linkedin: 'LinkedIn',
     },
-    cv: 'Download CV',
+    whatsappCta: 'Message me on WhatsApp',
+    cv: 'Download my CV',
     copy: 'Copy',
     copied: 'Copied',
   },
@@ -537,7 +799,16 @@ const en: Content = {
 
 export const CONTENT: Record<Lang, Content> = { fr, en }
 
-/** Convenience hook-free accessor for components that already know the lang. */
-export function t(lang: Lang): Content {
-  return CONTENT[lang]
+/** Month labels for certification dates, resolved per language. */
+const MONTHS: Record<Lang, string[]> = {
+  fr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+  en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+}
+
+/** `2025-08` → `août 2025`. Returns null when no date is claimed. */
+export function formatCertDate(date: string | null, lang: Lang): string | null {
+  if (!date) return null
+  const [year, month] = date.split('-')
+  const label = MONTHS[lang][Number(month) - 1]
+  return label ? `${label} ${year}` : year
 }

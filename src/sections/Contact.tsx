@@ -45,6 +45,27 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   )
 }
 
+/** Speech bubble with a handset inside — drawn here, not a brand asset. */
+function WhatsAppGlyph() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 16 16"
+      width="14"
+      height="14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="shrink-0"
+    >
+      <path d="M2 14l1.1-3.1A5.6 5.6 0 0 1 4.7 3.2a5.9 5.9 0 0 1 6.6 0 5.6 5.6 0 0 1 .3 9.1 5.9 5.9 0 0 1-6.4.5L2 14z" />
+      <path d="M6.1 6c.2 1 .6 1.8 1.3 2.5.7.7 1.5 1.1 2.5 1.3l.6-.9 1.1.6-.3 1c-1.3.3-2.7-.2-3.9-1.4C6.2 7.9 5.7 6.5 6 5.2l1-.3.6 1.1z" />
+    </svg>
+  )
+}
+
 const linkClass =
   'text-bone underline decoration-rule underline-offset-4 transition-colors hover:decoration-amber hover:text-amber focus-visible:text-amber'
 
@@ -79,9 +100,22 @@ export function Contact() {
           <CopyButton value={IDENTITY.phone} idle={c.copy} done={c.copied} />
         </Row>
 
+        <Row label={c.labels.whatsapp}>
+          <a
+            href={IDENTITY.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${linkClass} font-mono text-[0.85rem] tabular-nums`}
+          >
+            {IDENTITY.phone}
+          </a>
+        </Row>
+
         <Row label={c.labels.location}>
           <span>
             {IDENTITY.city}
+            <span className="text-mute"> · </span>
+            <span className="tabular-nums">{IDENTITY.postcode}</span>
             <span className="text-mute"> · </span>
             {IDENTITY.country[lang]}
           </span>
@@ -100,11 +134,22 @@ export function Contact() {
         </Row>
       </motion.dl>
 
-      <motion.div variants={item} className="mt-12">
+      {/* Primary control first — the fastest way to reach him — then the CV. */}
+      <motion.div variants={item} className="mt-12 flex flex-col flex-wrap gap-3 min-[480px]:flex-row min-[480px]:items-center min-[480px]:gap-4">
         <a
-          href="/CV-Ibrahima-Diallo.pdf"
+          href={IDENTITY.whatsappPrefilled}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-3 border border-trace px-5 py-3 font-mono text-[0.7rem] font-semibold tracking-[0.18em] text-trace uppercase transition-colors hover:bg-trace hover:text-void focus-visible:bg-trace focus-visible:text-void"
+        >
+          <WhatsAppGlyph />
+          {c.whatsappCta}
+        </a>
+
+        <a
+          href={IDENTITY.cv}
           download
-          className="inline-flex items-center gap-3 border border-amber px-5 py-3 font-mono text-[0.7rem] font-semibold tracking-[0.18em] text-amber uppercase transition-colors hover:bg-amber hover:text-void focus-visible:bg-amber focus-visible:text-void"
+          className="inline-flex items-center justify-center gap-3 border border-amber px-5 py-3 font-mono text-[0.7rem] font-semibold tracking-[0.18em] text-amber uppercase transition-colors hover:bg-amber hover:text-void focus-visible:bg-amber focus-visible:text-void"
         >
           {c.cv}
           <span aria-hidden="true">↓</span>

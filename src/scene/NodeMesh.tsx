@@ -47,6 +47,8 @@ function geometryFor(spec: NodeSpec) {
       return <dodecahedronGeometry args={[r, 0]} />
     case 'torus':
       return <torusGeometry args={[r * 0.82, r * 0.3, 8, 28]} />
+    case 'cylinder':
+      return <cylinderGeometry args={[r, r, r * 0.34, 12]} />
   }
 }
 
