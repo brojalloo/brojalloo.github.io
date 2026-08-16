@@ -1,5 +1,7 @@
 # Portfolio — Ibrahima Diallo
 
+**En ligne : [brojalloo.github.io](https://brojalloo.github.io)**
+
 Portfolio 3D interactif. Cybersécurité et DevSecOps.
 
 Le site n'est pas une page qui *décrit* un laboratoire DevOps : c'est le laboratoire lui-même, mis en scène. Six nœuds en orbite autour d'un noyau, et une scène signature où les neuf étapes du pipeline Jenkins deviennent une chaîne traversable — avec le scan Trivy qui détruit visiblement un artefact vulnérable au lieu de se contenter d'en parler.
