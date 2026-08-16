@@ -102,20 +102,36 @@ export const PROJECTS: Project[] = [
     highlights: ['stages', 'gate', 'observability', 'secrets'],
   },
   {
-    key: 'tekkiPro',
+    key: 'oncc',
+    name: 'ONCC Sénégal',
+    repo: 'https://github.com/brojalloo/oncc-senegal-laravel',
+    stack: ['Laravel 12', 'PHP 8.2', 'PostgreSQL', 'Docker', 'GitHub Actions', 'Leaflet'],
+    year: '2026',
+    highlights: ['roles', 'data', 'infra', 'ci'],
+  },
+  {
+    key: 'tekkiProSaas',
     name: 'TekkiPro',
+    repo: 'https://github.com/brojalloo/tekkipro',
+    stack: ['Node.js', 'Express', 'Prisma', 'React', 'React Native', 'PostgreSQL'],
+    year: '2026',
+    highlights: ['monorepo', 'api', 'mobile', 'ci'],
+  },
+  {
+    key: 'senRecrutement',
+    name: 'Sen-Recrutement',
+    repo: 'https://github.com/brojalloo/Sen-Recrutement',
+    stack: ['Laravel', 'PHP', 'Docker', 'Render'],
+    year: '2026',
+    highlights: ['scope', 'container', 'deploy'],
+  },
+  {
+    key: 'tekkiPro',
+    name: 'TekkiPro — version desktop',
     repo: 'https://github.com/brojalloo/Ma-boutique-',
     stack: ['Java 21', 'JavaFX', 'SQLite'],
     year: '2026',
     highlights: ['modules', 'architecture', 'licensing', 'packaging'],
-  },
-  {
-    key: 'senRecrutement',
-    name: 'SENRecrutement',
-    repo: null,
-    stack: [],
-    year: '2024',
-    highlights: [],
   },
 ]
 
@@ -124,6 +140,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
     key: 'cicd',
     items: [
       { name: 'Jenkins', note: 'pipeline' },
+      { name: 'GitHub Actions', note: 'workflows' },
       { name: 'Git', note: 'versioning' },
       { name: 'GitHub', note: 'remote' },
     ],
@@ -156,6 +173,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
     key: 'infra',
     items: [
       { name: 'Terraform', note: 'IaC' },
+      { name: 'Nginx', note: 'reverse proxy' },
       { name: 'Linux', note: 'système' },
     ],
   },
@@ -179,9 +197,12 @@ export const SKILL_GROUPS: SkillGroup[] = [
     key: 'backend',
     items: [
       { name: 'Node.js / Express', note: 'API' },
+      { name: 'Laravel', note: 'PHP' },
+      { name: 'React', note: 'web' },
+      { name: 'React Native', note: 'mobile' },
+      { name: 'Prisma', note: 'ORM' },
       { name: 'Java', note: 'desktop' },
       { name: 'Python', note: 'scripting' },
-      { name: 'PHP' },
       { name: 'HTML / CSS' },
     ],
   },
@@ -455,7 +476,7 @@ const fr = {
 
   projets: {
     kicker: `github.com/${IDENTITY.githubHandle}`,
-    heading: 'Trois projets : tenir une infrastructure, livrer un produit, apprendre le web.',
+    heading: 'Cinq projets, tous conteneurisés, testés et livrés par une chaîne automatisée.',
     open: 'Voir le dépôt',
     noRepo: 'Projet académique — dépôt non publié',
     featuredLabel: 'Projet principal',
@@ -470,20 +491,44 @@ const fr = {
         secrets: 'Secrets injectés par credential Jenkins, jamais commités',
       } as Record<string, string>,
     },
+    oncc: {
+      summary:
+        'Observatoire National sur les Changements Climatiques du Sénégal : une plateforme Laravel de collecte, d’analyse et de visualisation des données climatiques et économiques des quatorze régions du pays. C’est le projet où mon Master en économie de l’environnement et mon travail technique se rejoignent.',
+      highlights: {
+        roles: 'Quatre rôles — administrateur, chercheur, collectivité, public — dont les droits sont appliqués côté serveur, pas seulement masqués dans les vues',
+        data: 'Saisie des données climatiques et économiques, puis validation par un administrateur ; cartographie Leaflet et graphiques Chart.js',
+        infra: 'Image Docker complète : nginx, php-fpm et supervisord orchestrés dans le conteneur',
+        ci: 'Trois workflows GitHub Actions — intégration, build d’image et déploiement — et 26 fichiers de test',
+      } as Record<string, string>,
+    },
+    tekkiProSaas: {
+      summary:
+        'Version SaaS de TekkiPro : un monorepo réunissant trois applications — une API Node.js/Express avec Prisma, un client web React et un client mobile React Native. Pensé pour les marchés africains, en francs CFA.',
+      highlights: {
+        monorepo: 'Trois applications dans un dépôt : backend, frontend et mobile',
+        api: 'API Express avec Prisma sur PostgreSQL, logique métier découpée par domaine',
+        mobile: 'Client mobile React Native / Expo partageant le même contrat d’API',
+        ci: 'CI GitHub Actions sur chaque push et pull request ; 21 fichiers de test',
+      } as Record<string, string>,
+    },
+    senRecrutement: {
+      summary:
+        'Site de recrutement en ligne développé avec Laravel, né d’un projet académique de mon cursus en cybersécurité et poussé jusqu’à une chaîne de livraison conteneurisée.',
+      highlights: {
+        scope: 'Application Laravel complète, avec suite de tests PHPUnit',
+        container: 'Dockerfile et docker-compose pour un environnement reproductible',
+        deploy: 'Workflow GitHub Actions d’intégration et de déploiement, configuration Render',
+      } as Record<string, string>,
+    },
     tekkiPro: {
       summary:
-        'Logiciel de gestion de boutique pour commerçants, en Java 21 et JavaFX, avec base SQLite locale. Environ 266 Ko de code source, livré en version portable Windows qui se lance sans installation.',
+        'La première version de TekkiPro : un logiciel de gestion de boutique en Java 21 et JavaFX, avec base SQLite locale, livré en version portable Windows qui se lance sans installation.',
       highlights: {
         modules: 'Tableau de bord, stock avec alertes, facturation, dettes, rapports',
         architecture: 'Séparation models / dao / views / config, accès aux données isolé',
         licensing: 'Génération et activation de clés de licence',
         packaging: 'Version portable Windows, base créée au premier lancement',
       } as Record<string, string>,
-    },
-    senRecrutement: {
-      summary:
-        'Projet académique de création d’un site de recrutement en ligne, réalisé dans le cadre de mon cursus en cybersécurité.',
-      highlights: {} as Record<string, string>,
     },
   },
 
@@ -740,7 +785,7 @@ const en: Content = {
 
   projets: {
     kicker: `github.com/${IDENTITY.githubHandle}`,
-    heading: 'Three projects: keeping infrastructure alive, shipping a product, learning the web.',
+    heading: 'Five projects, all containerised, tested and shipped by an automated chain.',
     open: 'View repository',
     noRepo: 'Academic project — repository not published',
     featuredLabel: 'Main project',
@@ -755,20 +800,44 @@ const en: Content = {
         secrets: 'Secrets injected by Jenkins credential, never committed',
       },
     },
+    oncc: {
+      summary:
+        'Senegal’s National Observatory on Climate Change: a Laravel platform for collecting, analysing and visualising climate and economic data across the country’s fourteen regions. This is where my Master’s in environmental economics and my technical work meet.',
+      highlights: {
+        roles: 'Four roles — administrator, researcher, local authority, public — whose permissions are enforced server-side, not merely hidden in the views',
+        data: 'Climate and economic data entry, then administrator validation; Leaflet mapping and Chart.js graphs',
+        infra: 'Complete Docker image: nginx, php-fpm and supervisord orchestrated inside the container',
+        ci: 'Three GitHub Actions workflows — integration, image build and deployment — and 26 test files',
+      },
+    },
+    tekkiProSaas: {
+      summary:
+        'The SaaS version of TekkiPro: a monorepo holding three applications — a Node.js/Express API with Prisma, a React web client and a React Native mobile client. Built for African markets, in CFA francs.',
+      highlights: {
+        monorepo: 'Three applications in one repository: backend, frontend and mobile',
+        api: 'Express API with Prisma on PostgreSQL, business logic split by domain',
+        mobile: 'React Native / Expo mobile client sharing the same API contract',
+        ci: 'GitHub Actions CI on every push and pull request; 21 test files',
+      },
+    },
+    senRecrutement: {
+      summary:
+        'An online recruitment site built with Laravel, which began as an academic project in my cybersecurity coursework and was taken through to a containerised delivery chain.',
+      highlights: {
+        scope: 'Full Laravel application, with a PHPUnit test suite',
+        container: 'Dockerfile and docker-compose for a reproducible environment',
+        deploy: 'GitHub Actions integration and deployment workflow, Render configuration',
+      },
+    },
     tekkiPro: {
       summary:
-        'Shop management software for retailers, in Java 21 and JavaFX, with a local SQLite database. Around 266 KB of source, shipped as a portable Windows build that runs without installation.',
+        'The first version of TekkiPro: shop management software in Java 21 and JavaFX with a local SQLite database, shipped as a portable Windows build that runs without installation.',
       highlights: {
         modules: 'Dashboard, stock with low-stock alerts, invoicing, debts, reports',
         architecture: 'Separated models / dao / views / config, data access isolated',
         licensing: 'License key generation and activation',
         packaging: 'Portable Windows build, database created on first launch',
       },
-    },
-    senRecrutement: {
-      summary:
-        'An academic project building an online recruitment site, produced as part of my cybersecurity coursework.',
-      highlights: {},
     },
   },
 

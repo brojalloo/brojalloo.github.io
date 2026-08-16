@@ -11,9 +11,18 @@ import { useApp } from '../store'
   than crashing.
 */
 type ProjetsCopy = (typeof CONTENT)[Lang]['projets']
-type ProjectKey = Extract<keyof ProjetsCopy, 'devopsLab' | 'tekkiPro' | 'senRecrutement'>
+type ProjectKey = Extract<
+  keyof ProjetsCopy,
+  'devopsLab' | 'oncc' | 'tekkiProSaas' | 'senRecrutement' | 'tekkiPro'
+>
 
-const PROJECT_KEYS: ProjectKey[] = ['devopsLab', 'tekkiPro', 'senRecrutement']
+const PROJECT_KEYS: ProjectKey[] = [
+  'devopsLab',
+  'oncc',
+  'tekkiProSaas',
+  'senRecrutement',
+  'tekkiPro',
+]
 
 function isProjectKey(key: string): key is ProjectKey {
   return (PROJECT_KEYS as string[]).includes(key)
