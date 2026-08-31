@@ -4,7 +4,7 @@
 
 Portfolio 3D interactif. Cybersécurité et DevSecOps.
 
-Le site n'est pas une page qui *décrit* un laboratoire DevOps : c'est le laboratoire lui-même, mis en scène. Six nœuds en orbite autour d'un noyau, et une scène signature où les neuf étapes du pipeline Jenkins deviennent une chaîne traversable — avec le scan Trivy qui détruit visiblement un artefact vulnérable au lieu de se contenter d'en parler.
+Le site n'est pas une page qui *décrit* un laboratoire DevOps : c'est le laboratoire lui-même, mis en scène. Sept nœuds en orbite autour d'un noyau, et une scène signature où les neuf étapes du pipeline Jenkins deviennent une halle que l'on traverse : le défilement du panneau de lecture pilote la caméra, qui plonge dans la chaîne, s'arrête devant chaque poste, et marque un palier devant le portique Trivy — où le scan détruit visiblement un artefact vulnérable, au moment où vous arrivez, au lieu de se contenter d'en parler.
 
 ## Démarrer
 
@@ -25,8 +25,12 @@ Le site tourne sur http://localhost:5173.
 | `npm run build` | Build de production dans `dist/` |
 | `npm run preview` | Servir le build de production en local |
 | `npm run typecheck` | Vérification TypeScript de tout `src/` |
+| `npm test` | Tests unitaires de la trajectoire de caméra (vitest) |
+| `npm run lint` | oxlint |
 
 > `npx tsc --noEmit` seul ne vérifie rien ici : le `tsconfig.json` racine ne contient que des références de projet. C'est `tsc -b` qui contrôle réellement le code.
+
+> Les tests ne couvrent qu'une chose, mais la bonne : `src/scene/journey.ts`, la conversion d'une progression de défilement en position de caméra. C'est le seul morceau de la scène qui soit de la mathématique pure et donc vérifiable — le reste se juge à l'œil. Un test y garantit notamment que la caméra ne recule jamais le long de la chaîne, ce qui se produit dès qu'on pousse trop loin le serpentement de la trajectoire.
 
 ## Structure
 
@@ -39,9 +43,11 @@ src/
 ├── Fallback.tsx      Version document si WebGL est indisponible
 ├── lib/perf.ts       Détection de la capacité de l'appareil
 ├── scene/            Scène orbitale, caméra, atmosphère
-│   ├── nodes.ts      Position et forme des six nœuds
-│   ├── layout.ts     Géométrie de la chaîne du pipeline
-│   └── pipeline/     Scène signature CI/CD
+│   ├── nodes.ts      Position et forme des sept nœuds
+│   ├── layout.ts     Où se trouve la chaîne du pipeline
+│   ├── journey.ts    Comment la caméra la traverse (pur, testé)
+│   ├── Effects.tsx   Post-processing, chargé à la demande
+│   └── pipeline/     Scène signature CI/CD, dont la halle
 ├── ui/               HUD, panneau, écran d'accueil, bascule de langue
 └── sections/         Les sept sections de contenu
 ```
@@ -65,11 +71,24 @@ Le site choisit un budget de rendu au démarrage (`src/lib/perf.ts`) :
 - **`full`** — postprocessing, champ de particules complet, trafic de paquets complet.
 - **`lite`** — mobile, machines à quatre cœurs ou moins, rendu logiciel, ou `prefers-reduced-motion` activé. Même scène, moins de particules, pas de postprocessing.
 
-Sans WebGL, `Fallback.tsx` affiche les six sections dans un document défilant classique. Le contenu reste intégralement accessible.
+Sans WebGL, `Fallback.tsx` affiche les sept sections dans un document défilant classique. Le contenu reste intégralement accessible.
 
 Pour forcer un mode et vérifier l'autre chemin : `?tier=full` ou `?tier=lite` dans l'URL.
 
-**Poids du bundle** : environ 424 Ko compressés, dont l'essentiel est three.js. C'est le prix d'une scène 3D, et l'écran d'accueil couvre le chargement. La scène du pipeline est chargée séparément, seulement quand on entre dedans. Si la vitesse de chargement devient un problème sur les connexions mobiles lentes, la piste la plus rentable est de réduire ce que la scène importe de three.js, pas d'optimiser le reste du code.
+**Poids du bundle** : environ 411 Ko compressés au premier chargement, répartis par vitesse de changement plutôt qu'en un bloc.
+
+| Chunk | gzip | Chargé |
+| --- | --- | --- |
+| `three` | 185 Ko | toujours |
+| `three-helpers` (fiber, drei, stdlib, troika) | 100 Ko | toujours |
+| `index` (code du site + tous les textes) | 83 Ko | toujours |
+| `motion` (framer-motion) | 43 Ko | toujours |
+| `Effects` (post-processing) | 22 Ko | tier `full` uniquement |
+| `PipelineScene` | 6 Ko | nœud DevOps uniquement |
+
+Le découpage n'allège pas seulement le premier chargement : `three` ne bouge jamais, le code du site change à chaque déploiement, donc une simple correction de texte ne fait retélécharger que 83 Ko au lieu de la totalité.
+
+Ce qui reste est irréductible sans changer de parti pris : three.js et ses aides *sont* le site. Les deux seules pistes encore ouvertes coûteraient cher pour peu — remplacer framer-motion par des transitions CSS (43 Ko), ou charger `content.ts` par langue au lieu des deux ensemble (~6 Ko). Ni l'une ni l'autre ne vaut la complexité aujourd'hui.
 
 ## Déploiement
 
