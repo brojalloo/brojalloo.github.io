@@ -8,7 +8,7 @@ import { detectTier, dprRange } from './lib/perf'
 import { HOME_POSITION } from './scene/nodes'
 import { OrbitalScene } from './scene/OrbitalScene'
 import { CameraRig } from './scene/CameraRig'
-import { HallFog } from './scene/pipeline/Hall'
+import { HallFog } from './scene/HallFog'
 import { SECTIONS } from './sections'
 import { Boot } from './ui/Boot'
 import { Hud } from './ui/Hud'
@@ -69,7 +69,8 @@ export default function App() {
 
         <CameraRig />
         {/* Outside the lazy pipeline subtree on purpose: it has to be alive on
-            the way out to ease the fog back to its overview depth. */}
+            the way out to ease the fog back, and importing it from `pipeline/`
+            would pull that whole folder into the initial bundle. */}
         <HallFog />
         <OrbitalScene />
 

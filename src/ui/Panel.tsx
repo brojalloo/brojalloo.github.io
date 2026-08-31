@@ -116,7 +116,13 @@ export function Panel({ children }: { children: ReactNode }) {
             </button>
           </header>
 
-          <div className="panel-scroll flex-1 overflow-y-auto overscroll-contain px-5 pt-8 pb-20 sm:px-8">
+          {/* `data-journey-scroller` is the handle useJourneyScroll grabs. It is
+              deliberately not the `panel-scroll` class: that one is a scrollbar
+              style, and NodeIndex wears it too. */}
+          <div
+            data-journey-scroller=""
+            className="panel-scroll flex-1 overflow-y-auto overscroll-contain px-5 pt-8 pb-20 sm:px-8"
+          >
             {/* Both the outgoing and incoming node occupy the same grid cell, so
                 switching nodes reads as a crossfade in place rather than a jump. */}
             <div className="grid">

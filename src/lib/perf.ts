@@ -44,6 +44,19 @@ export function detectTier(): Tier {
   return 'full'
 }
 
+/**
+ * The OS-level motion preference, read at the moment it is asked for.
+ *
+ * Distinct from the tier: `detectTier` folds this in as one of several reasons
+ * to draw less, while callers here want the preference itself — a visitor on a
+ * fast machine who asked for less motion still gets the full scene, just
+ * without being carried through it.
+ */
+export function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
 /** Device pixel ratio ceiling per tier — the single biggest fill-rate lever. */
 export function dprRange(tier: Tier): [number, number] {
   return tier === 'full' ? [1, 1.75] : [1, 1.25]

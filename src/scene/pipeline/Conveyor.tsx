@@ -90,10 +90,9 @@ export function damp(current: number, target: number, lambda: number, dt: number
   return current + (target - current) * (1 - Math.exp(-lambda * dt))
 }
 
-export function prefersReducedMotion(): boolean {
-  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-}
+// Re-exported so the pipeline files keep drawing their whole vocabulary from
+// this one module; the implementation belongs with the other capability checks.
+export { prefersReducedMotion } from '../../lib/perf'
 
 // ---------------------------------------------------------------------------
 // The curve. Nine stage positions plus a lead-in and a lead-out, so packets

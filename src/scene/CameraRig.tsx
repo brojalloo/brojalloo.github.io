@@ -5,6 +5,7 @@ import { MathUtils, Spherical, Vector3 } from 'three'
 import { useApp } from '../store'
 import { dockAim, dockPosition, HOME_POSITION, NODE_BY_ID } from './nodes'
 import { JOURNEY, journeyAim, journeyView } from './journey'
+import { prefersReducedMotion } from '../lib/perf'
 
 /**
  * The camera is fully authored — no OrbitControls. Every view in the site is a
@@ -20,6 +21,9 @@ const LAMBDA = 2.2
 /** Faster than the node transitions: the journey must feel connected to the
     wheel, not like a camera catching up from another room. */
 const JOURNEY_LAMBDA = 4.2
+/** Reduced motion gets the same trajectory as a series of cuts: the visitor
+    still travels the whole chain, they just are not carried along it. */
+const JOURNEY_LAMBDA_CUT = 26
 const PARALLAX = 0.8
 /** Free-look amplitude at the orbital overview, in radians. */
 const DRAG_CLAMP_HOME = 0.35
@@ -31,7 +35,10 @@ const DRAG_RETURN = 1.8
 
 export function CameraRig() {
   const active = useApp((s) => s.active)
+  const tier = useApp((s) => s.tier)
   const gl = useThree((s) => s.gl)
+  const reduced = useMemo(() => prefersReducedMotion(), [])
+  const journeyLambda = tier === 'lite' || reduced ? JOURNEY_LAMBDA_CUT : JOURNEY_LAMBDA
   // Matches the breakpoint at which the panel stops being a right-hand column
   // and becomes a bottom sheet, which is what the lateral aim compensates for.
   const wide = useThree((s) => s.size.width) >= 768
@@ -115,7 +122,7 @@ export function CameraRig() {
     // pace, and a flick of the wheel becomes a glide rather than a jump.
     const onJourney = active === 'pipeline'
     if (onJourney) {
-      JOURNEY.progress = MathUtils.damp(JOURNEY.progress, JOURNEY.target, JOURNEY_LAMBDA, dt)
+      JOURNEY.progress = MathUtils.damp(JOURNEY.progress, JOURNEY.target, journeyLambda, dt)
       journeyView(JOURNEY.progress, journeyScratch.view)
       journeyAim(JOURNEY.progress, wide, journeyScratch.aim)
       target.position.copy(journeyScratch.view)

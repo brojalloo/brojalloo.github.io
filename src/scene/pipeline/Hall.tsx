@@ -1,6 +1,6 @@
-import { useMemo, useRef } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
-import { BufferGeometry, Float32BufferAttribute, Fog } from 'three'
+import { useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { BufferGeometry, Float32BufferAttribute } from 'three'
 import type { LineBasicMaterial } from 'three'
 import { STAGES } from '../../content'
 import { PIPELINE_ORIGIN, STAGE_SPACING, stagePosition } from '../layout'
@@ -217,34 +217,4 @@ export function Hall() {
       </lineSegments>
     </group>
   )
-}
-
-/**
- * The global fog is tuned for the orbital overview, where 22 to 78 units is
- * the right depth. Left alone it would render the far gantries as a crisp flat
- * grid. Inside the hall it closes right in, and it eases rather than cuts
- * because the fly-down is continuous.
- *
- * Mounted in App, not in PipelineScene: that subtree is lazy and unmounts on
- * leaving the node, which would strand the fog on the hall values and leave
- * the orbital view in soup.
- */
-const HALL_NEAR = 9
-const HALL_FAR = 46
-const HOME_NEAR = 22
-const HOME_FAR = 78
-
-export function HallFog() {
-  const scene = useThree((s) => s.scene)
-  const active = useApp((s) => s.active)
-  const fog = useMemo(() => (scene.fog instanceof Fog ? scene.fog : null), [scene])
-
-  useFrame((_, dt) => {
-    if (!fog) return
-    const inside = active === 'pipeline'
-    fog.near = damp(fog.near, inside ? HALL_NEAR : HOME_NEAR, 2.2, dt)
-    fog.far = damp(fog.far, inside ? HALL_FAR : HOME_FAR, 2.2, dt)
-  })
-
-  return null
 }

@@ -16,7 +16,16 @@ import { useApp } from '../store'
  *     times for a full descent.
  */
 
-/** Height fraction of the viewport at which a block counts as "being read". */
+/**
+ * Where in the scrolling box a block counts as "being read", as a fraction of
+ * that box's height.
+ *
+ * Measured against the scroller and not against the viewport, because the two
+ * are not the same box: on a wide screen the panel is a full-height column, but
+ * on a phone it is a sheet that starts at 40dvh. A viewport-relative line sits
+ * above that sheet entirely, no block ever crosses it, and the journey stays
+ * pinned to the first stage.
+ */
 const READING_LINE = 0.45
 
 export function useJourneyScroll(): void {
@@ -26,9 +35,7 @@ export function useJourneyScroll(): void {
     )
     if (blocks.length === 0) return
 
-    // The class is a scrollbar style in index.css and, from here, also the
-    // handle on the scrolling element. Renaming it breaks the journey.
-    const scroller = blocks[0].closest<HTMLElement>('.panel-scroll')
+    const scroller = blocks[0].closest<HTMLElement>('[data-journey-scroller]')
     if (!scroller) return
 
     let queued = false
@@ -36,7 +43,8 @@ export function useJourneyScroll(): void {
 
     const measure = () => {
       queued = false
-      const line = window.innerHeight * READING_LINE
+      const box = scroller.getBoundingClientRect()
+      const line = box.top + box.height * READING_LINE
 
       // The block whose centre is above the line, and the next one below it,
       // bracket where we are.
@@ -57,7 +65,7 @@ export function useJourneyScroll(): void {
           // Above the first block's centre: this is the approach, and it maps
           // onto the entry slot so the camera flies down rather than starting
           // parked in front of stage 01.
-          const start = window.innerHeight
+          const start = box.bottom
           const travelled = (start - currentCentre) / Math.max(1, start - line)
           progress = progressForStage(0) * Math.min(1, Math.max(0, travelled))
         } else if (index === blocks.length - 1 && currentCentre <= line) {
