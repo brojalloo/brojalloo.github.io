@@ -105,8 +105,25 @@ const GATE_HOLD = HOLDS[slotAt(GATE_INDEX)]
 
 export const GATE_ENTER = GATE_CENTRE - GATE_HOLD
 export const GATE_LEAVE = GATE_CENTRE + GATE_HOLD
-export const GATE_ARM_LOW = GATE_ENTER - GATE_HOLD * 0.9
-export const GATE_ARM_HIGH = GATE_LEAVE + GATE_HOLD * 0.9
+const GATE_ARM_LOW = GATE_ENTER - GATE_HOLD * 0.9
+const GATE_ARM_HIGH = GATE_LEAVE + GATE_HOLD * 0.9
+
+/** True where arriving should launch the CRITICAL packet. */
+export function onGatePlateau(p: number): boolean {
+  return p >= GATE_ENTER && p <= GATE_LEAVE
+}
+
+/**
+ * True where the visitor is far enough from the plateau that the destruction
+ * may be staged again.
+ *
+ * The gap between this and `onGatePlateau` is the whole point: if re-arming
+ * happened the instant you stepped off the plateau, a scroll that jitters
+ * across the boundary would restage the sequence on every frame.
+ */
+export function clearOfGatePlateau(p: number): boolean {
+  return p < GATE_ARM_LOW || p > GATE_ARM_HIGH
+}
 
 // ---------------------------------------------------------------------------
 // Anchors. Built once; `journeyView` only ever reads them.

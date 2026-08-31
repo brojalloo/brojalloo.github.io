@@ -3,11 +3,13 @@ import { Vector3 } from 'three'
 import { STAGES } from '../content'
 import { stagePosition } from './layout'
 import {
+  clearOfGatePlateau,
   GATE_ENTER,
   GATE_LEAVE,
   journeyAim,
   journeyDistance,
   journeyView,
+  onGatePlateau,
   progressForStage,
   stageAtProgress,
 } from './journey'
@@ -118,9 +120,40 @@ describe('journeyAim', () => {
 })
 
 describe('the gate plateau', () => {
+  const gate = progressForStage(STAGES.findIndex((s) => s.gate))
+
   it('brackets the gate stage', () => {
-    const gate = progressForStage(STAGES.findIndex((s) => s.gate))
     expect(GATE_ENTER).toBeLessThan(gate)
     expect(GATE_LEAVE).toBeGreaterThan(gate)
+  })
+
+  it('is on the plateau in front of the gate and nowhere near its neighbours', () => {
+    expect(onGatePlateau(gate)).toBe(true)
+    expect(onGatePlateau(progressForStage(5))).toBe(false)
+    expect(onGatePlateau(progressForStage(7))).toBe(false)
+  })
+
+  it('does not re-arm the moment you step off the plateau', () => {
+    // The whole point of the hysteresis: just outside is neither firing nor
+    // ready to fire, so a scroll jittering across the edge cannot restage it.
+    const justBelow = GATE_ENTER - 1e-6
+    const justAbove = GATE_LEAVE + 1e-6
+    expect(onGatePlateau(justBelow)).toBe(false)
+    expect(clearOfGatePlateau(justBelow)).toBe(false)
+    expect(onGatePlateau(justAbove)).toBe(false)
+    expect(clearOfGatePlateau(justAbove)).toBe(false)
+  })
+
+  it('re-arms once you have travelled well clear of it', () => {
+    expect(clearOfGatePlateau(progressForStage(5))).toBe(true)
+    expect(clearOfGatePlateau(progressForStage(7))).toBe(true)
+    expect(clearOfGatePlateau(0)).toBe(true)
+    expect(clearOfGatePlateau(1)).toBe(true)
+  })
+
+  it('never reports being on the plateau and clear of it at once', () => {
+    for (let p = 0; p <= 1; p += 0.001) {
+      expect(onGatePlateau(p) && clearOfGatePlateau(p)).toBe(false)
+    }
   })
 })

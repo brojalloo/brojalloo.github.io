@@ -19,6 +19,7 @@ import {
 import type { Group, Mesh, Points, PointLight } from 'three'
 import monoFontUrl from '@fontsource/martian-mono/files/martian-mono-latin-400-normal.woff?url'
 import { GATE_INDEX, stagePosition } from '../layout'
+import { clearOfGatePlateau, JOURNEY, onGatePlateau } from '../journey'
 import { useApp } from '../../store'
 import {
   clamp01,
@@ -117,6 +118,10 @@ export function SecurityGate() {
   const burstCycle = useRef(-1)
   const cycleIndex = useRef(0)
   const enteredAt = useRef(-1)
+  // True while the visitor has not yet triggered the destruction for this
+  // approach. Cleared on firing, set again only once they have travelled well
+  // clear of the plateau — a shaky scroll must not restage the whole thing.
+  const armed = useRef(true)
 
   const scratch = useMemo(() => ({ pos: new Vector3(), color: new Color() }), [])
 
@@ -244,6 +249,7 @@ export function SecurityGate() {
       enteredAt.current = -1
       cycleStart.current = -1
       burstCycle.current = -1
+      armed.current = true
     }
     const reveal = enteredAt.current < 0 ? 0 : revealAt(now - enteredAt.current, GATE_INDEX)
     gate.scale.setScalar(reveal <= 0 ? 0.0001 : easeOutBack(reveal))
@@ -276,23 +282,52 @@ export function SecurityGate() {
     PIPELINE_BUS.gateShut = false
 
     // --- cycle bookkeeping --------------------------------------------------
-    if (cycleStart.current < 0) {
-      // Start mid-cycle so the visitor sees the chain running normally for a
-      // few seconds before the gate fires for the first time.
-      cycleStart.current = now - SILENCE_END
-      cycleIndex.current = 0
-      // This first cycle is already past its destruction, so mark it as fired.
-      // Without this the burst would go off on the very first frame.
-      burstCycle.current = 0
+    // The destruction is not a loop the visitor happens to catch mid-way. It is
+    // caused by their arrival: the red packet leaves as they reach the plateau,
+    // and the silence that follows lands where they are sitting still, reading
+    // the paragraph about `--exit-code 1`.
+    const p = JOURNEY.progress
+    const onPlateau = onGatePlateau(p)
+
+    if (clearOfGatePlateau(p)) {
+      armed.current = true
     }
-    while (now - cycleStart.current >= PERIOD) {
-      cycleStart.current += PERIOD
+
+    if (onPlateau && armed.current) {
+      armed.current = false
+      cycleStart.current = now
       cycleIndex.current += 1
     }
+
+    if (cycleStart.current < 0) {
+      // Not triggered yet: the chain runs clean, the gate sits armed and open.
+      PIPELINE_BUS.blockUntil = 0
+      PIPELINE_BUS.nextCriticalAt = Number.POSITIVE_INFINITY
+      const idleTop = topRef.current
+      const idleBottom = bottomRef.current
+      if (idleTop) idleTop.position.y = PACKET_LIFT + APERTURE_ARMED + BLADE_HALF
+      if (idleBottom) idleBottom.position.y = PACKET_LIFT - (APERTURE_ARMED + BLADE_HALF)
+      mats.edge.emissiveIntensity = 1.1
+      mats.blade.emissiveIntensity = 0.16
+      if (lightRef.current) lightRef.current.intensity = 0.9
+      if (critRef.current) critRef.current.visible = false
+      if (shockRef.current) shockRef.current.visible = false
+      if (pointsRef.current) pointsRef.current.visible = false
+      return
+    }
+
     const ct = now - cycleStart.current
 
+    // One run, then the gate goes quiet until the next arrival.
+    if (ct > PERIOD) {
+      cycleStart.current = -1
+      return
+    }
+
     PIPELINE_BUS.blockUntil = cycleStart.current + SILENCE_END
-    PIPELINE_BUS.nextCriticalAt = cycleStart.current + PERIOD
+    PIPELINE_BUS.nextCriticalAt = armed.current
+      ? Number.POSITIVE_INFINITY
+      : cycleStart.current + PERIOD
 
     const d = ct - TRAVEL_END
 
