@@ -32,14 +32,14 @@ export const GATE_INDEX = STAGES.findIndex((s) => s.gate)
  * the subject clear of the content panel on wide viewports. Derived from the
  * panel covering ~46% of the width at a 46° vertical field of view.
  */
-const AIM_SHIFT = 0.31
+export const AIM_SHIFT = 0.31
 
 /**
  * Same idea vertically, for narrow viewports where the panel is a bottom sheet
  * covering everything below 40% of the height: aim down, and the subject rises
  * into the strip that is still visible.
  */
-const SHEET_LIFT = 0.3
+export const SHEET_LIFT = 0.3
 
 /**
  * Default view of the chain.
