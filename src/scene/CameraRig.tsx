@@ -4,7 +4,7 @@ import { MathUtils, Spherical, Vector3 } from 'three'
 
 import { useApp } from '../store'
 import { dockAim, dockPosition, HOME_POSITION, NODE_BY_ID } from './nodes'
-import { pipelineAim, pipelineView, stageAim, stageView } from './layout'
+import { JOURNEY, journeyAim, journeyView } from './journey'
 
 /**
  * The camera is fully authored — no OrbitControls. Every view in the site is a
@@ -17,6 +17,9 @@ import { pipelineAim, pipelineView, stageAim, stageView } from './layout'
 
 /** ~1s to settle, no overshoot. */
 const LAMBDA = 2.2
+/** Faster than the node transitions: the journey must feel connected to the
+    wheel, not like a camera catching up from another room. */
+const JOURNEY_LAMBDA = 4.2
 const PARALLAX = 0.8
 const DRAG_CLAMP = 0.35
 const DRAG_SENSITIVITY = 0.0035
@@ -24,13 +27,14 @@ const DRAG_RETURN = 1.8
 
 export function CameraRig() {
   const active = useApp((s) => s.active)
-  const stage = useApp((s) => s.stage)
   const gl = useThree((s) => s.gl)
   // Matches the breakpoint at which the panel stops being a right-hand column
   // and becomes a bottom sheet, which is what the lateral aim compensates for.
   const wide = useThree((s) => s.size.width) >= 768
 
-  // Recomputed only when the destination changes, so useFrame never allocates.
+  // Only the static destinations are memoised. The pipeline target is a
+  // function of JOURNEY.progress and is therefore recomputed each frame, below,
+  // into these same vectors — which never reallocate.
   const target = useMemo(() => {
     const position = new Vector3()
     const look = new Vector3()
@@ -38,24 +42,17 @@ export function CameraRig() {
     if (active === null) {
       position.fromArray(HOME_POSITION)
       look.set(0, 0, 0)
-    } else if (active === 'pipeline') {
-      if (stage >= 0) {
-        position.fromArray(stageView(stage))
-        look.fromArray(stageAim(stage, wide))
-      } else {
-        position.fromArray(pipelineView())
-        look.fromArray(pipelineAim(wide))
-      }
-    } else {
+    } else if (active !== 'pipeline') {
       const node = NODE_BY_ID[active]
       position.fromArray(node.position).add(new Vector3(...dockPosition(node.radius)))
       look.fromArray(node.position).add(new Vector3(...dockAim(node.radius, wide)))
     }
 
     return { position, look }
-  }, [active, stage, wide])
+  }, [active, wide])
 
   const scratch = useMemo(() => ({ desired: new Vector3(), spherical: new Spherical() }), [])
+  const journeyScratch = useMemo(() => ({ view: new Vector3(), aim: new Vector3() }), [])
   const lookNow = useRef(new Vector3(0, 0, 0))
 
   // Drag is an offset from the authored overview, not a free orbit: it springs
@@ -110,6 +107,18 @@ export function CameraRig() {
     if (!atHome || !d.dragging) {
       d.azimuth = MathUtils.damp(d.azimuth, 0, DRAG_RETURN, dt)
       d.elevation = MathUtils.damp(d.elevation, 0, DRAG_RETURN, dt)
+    }
+
+    // The journey is damped here, not in the scroll handler: the scroll writes
+    // a target whenever the visitor moves, the camera closes the gap at its own
+    // pace, and a flick of the wheel becomes a glide rather than a jump.
+    const onJourney = active === 'pipeline'
+    if (onJourney) {
+      JOURNEY.progress = MathUtils.damp(JOURNEY.progress, JOURNEY.target, JOURNEY_LAMBDA, dt)
+      journeyView(JOURNEY.progress, journeyScratch.view)
+      journeyAim(JOURNEY.progress, wide, journeyScratch.aim)
+      target.position.copy(journeyScratch.view)
+      target.look.copy(journeyScratch.aim)
     }
 
     scratch.desired.copy(target.position)

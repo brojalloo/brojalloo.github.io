@@ -60,6 +60,16 @@ export function useJourneyScroll(): void {
           const start = window.innerHeight
           const travelled = (start - currentCentre) / Math.max(1, start - line)
           progress = progressForStage(0) * Math.min(1, Math.max(0, travelled))
+        } else if (index === blocks.length - 1 && currentCentre <= line) {
+          // Past the last stage. The panel still has the API table, the secrets
+          // and the proofs to read, and none of them are places on the chain —
+          // so the tail maps onto the exit slot and the camera pulls back to a
+          // wide shot instead of staying pressed against stage 09.
+          const travelled = line - currentCentre
+          const remaining = scroller.scrollHeight - scroller.clientHeight - scroller.scrollTop
+          const f = travelled / Math.max(1, travelled + remaining)
+          const a = progressForStage(index)
+          progress = a + (1 - a) * Math.min(1, Math.max(0, f))
         }
       } else {
         const next = blocks[index + 1].getBoundingClientRect()
