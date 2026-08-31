@@ -8,6 +8,7 @@ import { detectTier, dprRange } from './lib/perf'
 import { HOME_POSITION } from './scene/nodes'
 import { OrbitalScene } from './scene/OrbitalScene'
 import { CameraRig } from './scene/CameraRig'
+import { HallFog } from './scene/pipeline/Hall'
 import { SECTIONS } from './sections'
 import { Boot } from './ui/Boot'
 import { Hud } from './ui/Hud'
@@ -67,6 +68,9 @@ export default function App() {
         <fog attach="fog" args={['#06080b', 22, 78]} />
 
         <CameraRig />
+        {/* Outside the lazy pipeline subtree on purpose: it has to be alive on
+            the way out to ease the fog back to its overview depth. */}
+        <HallFog />
         <OrbitalScene />
 
         {active === 'pipeline' && (

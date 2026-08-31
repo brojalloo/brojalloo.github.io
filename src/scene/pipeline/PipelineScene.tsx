@@ -1,5 +1,6 @@
 import { STAGES } from '../../content'
 import { Conveyor, PIPE } from './Conveyor'
+import { Hall } from './Hall'
 import { Packets } from './Packets'
 import { SecurityGate } from './SecurityGate'
 import { StageMarker } from './StageMarker'
@@ -26,6 +27,8 @@ export function PipelineScene() {
       <directionalLight color={PIPE.amber} intensity={0.95} position={[-3.5, 8, 4.5]} />
       {/* A cold rim from behind, so the markers keep an edge against the void. */}
       <directionalLight color={PIPE.trace} intensity={0.22} position={[2.5, -1.5, -6]} />
+
+      <Hall />
 
       <Conveyor />
 
