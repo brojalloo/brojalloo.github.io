@@ -6,7 +6,7 @@ interface AppState {
   active: NodeId | null
   /** Node under the pointer, drives hover highlight in both scene and HUD. */
   hovered: NodeId | null
-  /** Stage index the pipeline scene is focused on, -1 = whole chain. */
+  /** Stage the journey is currently at. `-1` only when outside the pipeline. */
   stage: number
   lang: Lang
   tier: Tier
@@ -38,9 +38,10 @@ export const useApp = create<AppState>((set) => ({
   tier: 'full',
   booting: true,
 
-  // Leaving a node always resets the pipeline focus, so re-entering starts
-  // from the full chain rather than wherever the visitor left off.
-  goTo: (id) => set({ active: id, stage: -1, hovered: null }),
+  // Entering the pipeline starts the journey at the first stage rather than at
+  // "no stage": the journey always sits somewhere on the chain. Leaving any
+  // node releases it, so the next entry starts from the top again.
+  goTo: (id) => set({ active: id, stage: id === 'pipeline' ? 0 : -1, hovered: null }),
   setHovered: (id) => set({ hovered: id }),
   setStage: (i) => set({ stage: i }),
   toggleLang: () =>

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import type { Variants } from 'framer-motion'
-import { EASE, stagger, useRise } from './motion'
+import { stagger, useRise } from './motion'
 import { ARCHITECTURE, CONTENT, PROOFS, STAGES } from '../content'
 import { useApp } from '../store'
 
@@ -55,11 +55,9 @@ function Tick() {
 
 export function Pipeline() {
   const lang = useApp((s) => s.lang)
+  // Read to highlight the stage the journey is currently at. Nothing in this
+  // section sets it — the scroll position does, through useJourneyScroll.
   const stage = useApp((s) => s.stage)
-  const setStage = useApp((s) => s.setStage)
-  // `reduced` is still needed on its own here: the stage accordion animates its
-  // height, which the shared entrance variant does not cover.
-  const reduced = useReducedMotion()
   const item = useRise()
   const c = CONTENT[lang].pipeline
 
@@ -122,76 +120,60 @@ export function Pipeline() {
         </div>
       </Block>
 
-      {/* ---- The nine stages, one open at a time ---- */}
-      <motion.ul variants={item} className="mt-14 border-t border-rule">
+      {/* ---- The nine stages. All open: their stacked height is the timeline
+              the camera travels along, so nothing may collapse. ---- */}
+      <motion.ol variants={item} className="mt-14 border-t border-rule">
         {STAGES.map((spec, i) => {
-          const open = stage === i
           const detail = c.stageDetail[spec.key]
-          const panelId = `pipeline-panel-${spec.key}`
-          const tabId = `pipeline-stage-${spec.key}`
+          const current = stage === i
 
           return (
-            <li key={spec.key} className="border-b border-rule">
-              <button
-                type="button"
-                id={tabId}
-                aria-expanded={open}
-                aria-controls={panelId}
-                onClick={() => setStage(open ? -1 : i)}
-                className="group flex w-full items-center gap-3 py-3 text-left sm:gap-4"
-              >
+            <li
+              key={spec.key}
+              id={`stage-anchor-${spec.key}`}
+              data-stage-index={i}
+              className="border-b border-rule py-6"
+            >
+              <div className="flex items-center gap-3 sm:gap-4">
                 <span
                   aria-hidden="true"
                   className={`h-5 w-[2px] shrink-0 ${spec.gate ? 'bg-alert' : 'bg-transparent'}`}
                 />
                 <span className="font-mono text-[0.68rem] tabular-nums text-mute">{pad(i + 1)}</span>
                 <span
-                  className={`font-mono text-[0.68rem] tracking-[0.14em] transition-colors duration-200 ${
-                    open ? 'text-amber' : 'text-bone group-hover:text-amber'
+                  className={`font-mono text-[0.68rem] tracking-[0.14em] transition-colors duration-300 ${
+                    current ? 'text-amber' : 'text-bone'
                   }`}
                 >
                   {spec.label}
                 </span>
                 <span
                   aria-hidden="true"
-                  className={`ml-auto h-px w-4 shrink-0 transition-colors duration-200 ${
-                    open ? 'bg-amber' : 'bg-rule group-hover:bg-mute'
+                  className={`ml-auto h-px shrink-0 transition-all duration-300 ${
+                    current ? 'w-10 bg-amber' : 'w-4 bg-rule'
                   }`}
                 />
-              </button>
+              </div>
 
-              <AnimatePresence initial={false}>
-                {open && detail ? (
-                  <motion.div
-                    id={panelId}
-                    role="region"
-                    aria-labelledby={tabId}
-                    initial={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                    animate={reduced ? { opacity: 1 } : { height: 'auto', opacity: 1 }}
-                    exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                    transition={{ duration: reduced ? 0.15 : 0.28, ease: EASE }}
-                    className="overflow-hidden"
-                  >
-                    <div className="pb-6 pl-8 sm:pl-[3.25rem]">
-                      <p className="font-mono text-[0.7rem] tracking-[0.08em] text-trace">
-                        {detail.title}
-                      </p>
-                      <p className="mt-3 max-w-[62ch] text-[0.9rem] leading-[1.75] text-ash">
-                        {detail.body}
-                      </p>
-                      {spec.gate ? (
-                        <p className="mt-5 max-w-[58ch] border-l-2 border-alert pl-4 text-[0.85rem] leading-[1.7] text-alert">
-                          {c.gateNote}
-                        </p>
-                      ) : null}
-                    </div>
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
+              {detail ? (
+                <div className="pt-4 pl-8 sm:pl-[3.25rem]">
+                  <p className="font-mono text-[0.7rem] tracking-[0.08em] text-trace">
+                    {detail.title}
+                  </p>
+                  <p className="mt-3 max-w-[62ch] text-[0.9rem] leading-[1.75] text-ash">
+                    {detail.body}
+                  </p>
+                  {spec.gate ? (
+                    <p className="mt-5 max-w-[58ch] border-l-2 border-alert pl-4 text-[0.85rem] leading-[1.7] text-alert">
+                      {c.gateNote}
+                    </p>
+                  ) : null}
+                </div>
+              ) : null}
             </li>
           )
         })}
-      </motion.ul>
+      </motion.ol>
 
       {/* ---- API surface ---- */}
       <Block item={item} title={c.api.title}>

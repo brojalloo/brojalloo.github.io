@@ -38,16 +38,16 @@ export function Panel({ children }: { children: ReactNode }) {
   const index = NODE_IDS.indexOf(node)
 
   // Escape is registered once for the lifetime of the app rather than per open,
-  // and reads the store at the moment it fires. Inside the pipeline it first
-  // releases the focused stage — one press should undo one step, not two.
+  // and reads the store at the moment it fires.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return
       const s = useApp.getState()
       if (s.active === null) return
       e.preventDefault()
-      if (s.stage >= 0) s.setStage(-1)
-      else s.goTo(null)
+      // One press, one step out. `stage` is no longer a disclosure state, so
+      // there is nothing to release before leaving.
+      s.goTo(null)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)

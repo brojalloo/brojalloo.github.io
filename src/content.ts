@@ -313,7 +313,7 @@ const fr = {
     heading:
       'Neuf étapes entre un commit et la production. Deux d’entre elles ont le droit de tout arrêter.',
     intro:
-      'Laboratoire DevOps complet permettant d’automatiser le build, les tests, l’analyse qualité, la sécurité, le déploiement, le monitoring et l’observabilité d’une API Node.js/PostgreSQL. Cliquez une étape pour voir ce qu’elle fait.',
+      'Laboratoire DevOps complet permettant d’automatiser le build, les tests, l’analyse qualité, la sécurité, le déploiement, le monitoring et l’observabilité d’une API Node.js/PostgreSQL. Faites défiler pour parcourir la chaîne, étape par étape.',
     gateNote:
       'Trivy scanne l’image après sa construction avec --severity CRITICAL --exit-code 1. Une vulnérabilité critique fait échouer le build : rien ne part en production.',
     stageDetail: {
@@ -623,7 +623,7 @@ const en: Content = {
     kicker: 'Main project · devops-lap',
     heading: 'Nine stages between a commit and production. Two of them are allowed to stop everything.',
     intro:
-      'A complete DevOps lab automating the build, tests, quality analysis, security, deployment, monitoring and observability of a Node.js/PostgreSQL API. Click a stage to see what it does.',
+      'A complete DevOps lab automating the build, tests, quality analysis, security, deployment, monitoring and observability of a Node.js/PostgreSQL API. Scroll to travel the chain, stage by stage.',
     gateNote:
       'Trivy scans the image after it is built, with --severity CRITICAL --exit-code 1. A critical vulnerability fails the build: nothing reaches production.',
     stageDetail: {
