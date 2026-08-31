@@ -8,6 +8,7 @@ import monoFontUrl from '@fontsource/martian-mono/files/martian-mono-latin-400-n
 import type { PipelineStage } from '../../types'
 import { useApp } from '../../store'
 import { stagePosition } from '../layout'
+import { JOURNEY, progressForStage } from '../journey'
 import {
   C_AMBER,
   C_BONE,
@@ -16,6 +17,7 @@ import {
   damp,
   easeOutBack,
   PIPE,
+  prefersReducedMotion,
   revealAt,
   type TroikaText,
 } from './Conveyor'
@@ -42,10 +44,11 @@ const FOOT_GEOM = new BoxGeometry(0.2, 0.05, 0.2)
 const HIT_SPHERE = new SphereGeometry(0.92, 12, 10)
 const HIT_BOX = new BoxGeometry(1.75, 2.4, 1.1)
 
+/** Progress distance over which a marker fades from lit to dark. */
+const FOCUS_REACH = 0.075
+
 export function StageMarker({ index, spec }: Props) {
-  const stage = useApp((s) => s.stage)
   const active = useApp((s) => s.active)
-  const setStage = useApp((s) => s.setStage)
 
   const position = useMemo(() => stagePosition(index), [index])
   const number = useMemo(() => String(index + 1).padStart(2, '0'), [index])
@@ -130,10 +133,15 @@ export function StageMarker({ index, spec }: Props) {
   const onClick = useCallback(
     (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation()
-      // Clicking the stage you are already reading zooms back out to the chain.
-      setStage(useApp.getState().stage === index ? -1 : index)
+      // Everything moves the camera through the scroll position, this included.
+      // Nothing in the scene sets the camera directly.
+      const block = document.querySelector<HTMLElement>(`[data-stage-index="${index}"]`)
+      block?.scrollIntoView({
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+        block: 'center',
+      })
     },
-    [index, setStage],
+    [index],
   )
 
   useFrame((state, dt) => {
@@ -156,9 +164,12 @@ export function StageMarker({ index, spec }: Props) {
 
     // --- state → animated scalars ---
     const a = anim.current
-    const focusTarget = stage === index ? 1 : 0
+    // Focus is a distance, not a match: the camera is continuously somewhere
+    // between two stages, and the light on the markers has to be too.
+    const reach = Math.abs(JOURNEY.progress - progressForStage(index))
+    const focusTarget = Math.max(0, 1 - reach / FOCUS_REACH)
     const hoverTarget = hovered.current ? 1 : 0
-    const dimTarget = stage >= 0 && stage !== index ? 1 : 0
+    const dimTarget = 1 - focusTarget
     a.focus = damp(a.focus, focusTarget, 9, dt)
     a.hover = damp(a.hover, hoverTarget, 12, dt)
     a.dim = damp(a.dim, dimTarget, 7, dt)

@@ -21,7 +21,11 @@ const LAMBDA = 2.2
     wheel, not like a camera catching up from another room. */
 const JOURNEY_LAMBDA = 4.2
 const PARALLAX = 0.8
-const DRAG_CLAMP = 0.35
+/** Free-look amplitude at the orbital overview, in radians. */
+const DRAG_CLAMP_HOME = 0.35
+/** Tighter inside the journey: the camera is already moving and the framing of
+    each stage is authored. Enough to glance aside, never to break a shot. */
+const DRAG_CLAMP_JOURNEY = 0.18
 const DRAG_SENSITIVITY = 0.0035
 const DRAG_RETURN = 1.8
 
@@ -70,15 +74,12 @@ export function CameraRig() {
     }
     const onMove = (e: PointerEvent) => {
       if (!d.dragging) return
-      d.azimuth = MathUtils.clamp(
-        d.azimuth - (e.clientX - d.x) * DRAG_SENSITIVITY,
-        -DRAG_CLAMP,
-        DRAG_CLAMP,
-      )
+      const limit = useApp.getState().active === null ? DRAG_CLAMP_HOME : DRAG_CLAMP_JOURNEY
+      d.azimuth = MathUtils.clamp(d.azimuth - (e.clientX - d.x) * DRAG_SENSITIVITY, -limit, limit)
       d.elevation = MathUtils.clamp(
         d.elevation + (e.clientY - d.y) * DRAG_SENSITIVITY,
-        -DRAG_CLAMP,
-        DRAG_CLAMP,
+        -limit,
+        limit,
       )
       d.x = e.clientX
       d.y = e.clientY
@@ -104,7 +105,7 @@ export function CameraRig() {
     const d = drag.current
     const atHome = active === null
 
-    if (!atHome || !d.dragging) {
+    if (!d.dragging) {
       d.azimuth = MathUtils.damp(d.azimuth, 0, DRAG_RETURN, dt)
       d.elevation = MathUtils.damp(d.elevation, 0, DRAG_RETURN, dt)
     }
@@ -123,7 +124,12 @@ export function CameraRig() {
 
     scratch.desired.copy(target.position)
 
-    if (atHome) {
+    if (atHome || onJourney) {
+      // `setFromVector3` decomposes around the world origin, which is the centre
+      // of the orbital scene — sixty units above the chain. Rotating theta there
+      // would swing the journey camera through an enormous arc, so inside the
+      // pipeline the pivot moves to whatever the camera is looking at.
+      if (onJourney) scratch.desired.sub(target.look)
       scratch.spherical.setFromVector3(scratch.desired)
       scratch.spherical.theta += d.azimuth
       scratch.spherical.phi = MathUtils.clamp(
@@ -132,6 +138,12 @@ export function CameraRig() {
         Math.PI - 0.25,
       )
       scratch.desired.setFromSpherical(scratch.spherical)
+      if (onJourney) scratch.desired.add(target.look)
+    }
+
+    if (atHome) {
+      // Pointer parallax stays at the overview only. Added to a camera that is
+      // already travelling, it reads as seasickness.
       scratch.desired.x += state.pointer.x * PARALLAX
       scratch.desired.y += state.pointer.y * PARALLAX
     }
