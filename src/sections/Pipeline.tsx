@@ -4,6 +4,7 @@ import type { Variants } from 'framer-motion'
 import { stagger, useRise } from './motion'
 import { ARCHITECTURE, CONTENT, PROOFS, STAGES } from '../content'
 import { useApp } from '../store'
+import { useJourneyScroll } from '../ui/useJourneyScroll'
 
 type Item = Variants
 
@@ -59,6 +60,10 @@ export function Pipeline() {
   // section sets it — the scroll position does, through useJourneyScroll.
   const stage = useApp((s) => s.stage)
   const item = useRise()
+
+  // The panel's own scroll is the journey. Mounted here rather than in Panel,
+  // so the panel keeps knowing nothing about what it displays.
+  useJourneyScroll()
   const c = CONTENT[lang].pipeline
 
   // role="img" hides the drawing from assistive tech, so the flow is spelled
