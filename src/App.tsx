@@ -1,6 +1,5 @@
 import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import { AnimatePresence } from 'framer-motion'
 
 import { useApp } from './store'
@@ -20,6 +19,10 @@ import { Fallback } from './Fallback'
 const PipelineScene = lazy(() =>
   import('./scene/pipeline/PipelineScene').then((m) => ({ default: m.PipelineScene })),
 )
+
+// Same reasoning for the postprocessing pass: it is a large dependency that the
+// lite tier never renders, and the lite tier is most phones.
+const Effects = lazy(() => import('./scene/Effects').then((m) => ({ default: m.Effects })))
 
 function hasWebGL(): boolean {
   try {
@@ -81,12 +84,9 @@ export default function App() {
         )}
 
         {tier === 'full' && (
-          <EffectComposer>
-            {/* Restrained: the bloom exists to make the amber core and the
-                travelling packets read as emissive, not to wash the scene. */}
-            <Bloom intensity={0.72} luminanceThreshold={0.34} luminanceSmoothing={0.3} mipmapBlur />
-            <Vignette offset={0.28} darkness={0.62} eskil={false} />
-          </EffectComposer>
+          <Suspense fallback={null}>
+            <Effects />
+          </Suspense>
         )}
       </Canvas>
 

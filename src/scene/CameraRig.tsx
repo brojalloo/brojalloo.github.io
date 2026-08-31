@@ -21,8 +21,15 @@ const LAMBDA = 2.2
 /** Faster than the node transitions: the journey must feel connected to the
     wheel, not like a camera catching up from another room. */
 const JOURNEY_LAMBDA = 4.2
-/** Reduced motion gets the same trajectory as a series of cuts: the visitor
-    still travels the whole chain, they just are not carried along it. */
+/**
+ * Reduced motion gets the same trajectory as a series of cuts: the visitor
+ * still travels the whole chain, they just are not carried along it.
+ *
+ * Keyed on the OS preference alone, never on the tier. A phone that fell to
+ * `lite` to save its battery has not asked for less motion, and damping one
+ * scalar per frame costs nothing on any GPU — cutting there would take the
+ * journey away from the visitors most likely to be on a phone, for no gain.
+ */
 const JOURNEY_LAMBDA_CUT = 26
 const PARALLAX = 0.8
 /** Free-look amplitude at the orbital overview, in radians. */
@@ -35,10 +42,9 @@ const DRAG_RETURN = 1.8
 
 export function CameraRig() {
   const active = useApp((s) => s.active)
-  const tier = useApp((s) => s.tier)
   const gl = useThree((s) => s.gl)
   const reduced = useMemo(() => prefersReducedMotion(), [])
-  const journeyLambda = tier === 'lite' || reduced ? JOURNEY_LAMBDA_CUT : JOURNEY_LAMBDA
+  const journeyLambda = reduced ? JOURNEY_LAMBDA_CUT : JOURNEY_LAMBDA
   // Matches the breakpoint at which the panel stops being a right-hand column
   // and becomes a bottom sheet, which is what the lateral aim compensates for.
   const wide = useThree((s) => s.size.width) >= 768

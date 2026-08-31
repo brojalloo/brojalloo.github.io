@@ -233,11 +233,18 @@ large et le visiteur continue de lire.
 
 ## 8. Dégradations
 
-**`lite` et `prefers-reduced-motion`** — la caméra ne glisse plus, elle coupe :
-même trajectoire, amortissement quasi instantané, donc un enchaînement de plans
-fixes. Le sol perd la moitié de son étendue, les portiques sont dessinés mais
-ne défilent pas, et `PIPELINE_BUS.gateShut`, déjà en place, laisse le portique
-fermé en permanence. La démonstration est faite sans mouvement.
+**`prefers-reduced-motion`** — la caméra ne glisse plus, elle coupe : même
+trajectoire, amortissement quasi instantané, donc un enchaînement de plans
+fixes.
+
+**`lite`** — le glissement est conservé. Corrigé après coup : la première
+version coupait aussi en `lite`, ce qui confondait deux choses différentes. Un
+téléphone tombe en `lite` pour économiser sa batterie, pas parce que son
+propriétaire a demandé moins d'animation, et amortir un scalaire par frame ne
+coûte rien sur aucun GPU. Ce que `lite` retire, ce sont les choses qui coûtent
+vraiment : le sol perd la moitié de son étendue, la passe de postprocessing
+n'est ni rendue ni même téléchargée, et `PIPELINE_BUS.gateShut` laisse le
+portique fermé en permanence plutôt que de jouer la destruction.
 
 **Mobile** — le panneau est une feuille de 60dvh sur laquelle le pouce défile
 déjà ; ce geste devient le voyage. `journeyAim` applique `SHEET_LIFT` et la 3D
