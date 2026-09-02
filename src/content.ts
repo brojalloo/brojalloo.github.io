@@ -221,7 +221,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
 
 /** Studies and work, most recent first. */
 export const TIMELINE = [
-  { key: 'master2', period: 'juil. 2026 →', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
+  { key: 'master2', period: 'août 2026 →', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
   { key: 'master1', period: 'mai 2025 — juin 2026', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
   { key: 'l2cyber', period: 'oct. 2024 — juil. 2025', place: "Institut Supérieur d'Informatique, Keur Massar", kind: 'study' },
   { key: 'l1cyber', period: 'nov. 2023 — juil. 2024', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
