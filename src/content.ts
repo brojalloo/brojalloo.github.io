@@ -221,7 +221,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
 
 /** Studies and work, most recent first. */
 export const TIMELINE = [
-  { key: 'master1', period: 'mai 2025 →', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
+  { key: 'master', period: 'mai 2025 →', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
   { key: 'l2cyber', period: 'oct. 2024 — juil. 2025', place: "Institut Supérieur d'Informatique, Keur Massar", kind: 'study' },
   { key: 'l1cyber', period: 'nov. 2023 — juil. 2024', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
   { key: 'l3eco', period: 'sept. 2022 — juil. 2023', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
@@ -289,14 +289,14 @@ const fr = {
       'Je viens de l’économie. J’en ai gardé l’habitude de comprendre un système avant de le toucher.',
     photoAlt: 'Ibrahima Diallo, portrait professionnel',
     body: [
-      'Je suis étudiant en Master 1 d’Économie de l’environnement et du développement durable, après deux années de licence en cybersécurité. Ce parcours en apparence décousu a une logique : trois ans à analyser des organisations m’ont appris à chercher pourquoi un système casse. Depuis 2023, les systèmes que j’analyse sont techniques.',
+      'Je suis étudiant en Master 2 d’Économie de l’environnement et du développement durable, après deux années de licence en cybersécurité. Ce parcours en apparence décousu a une logique : trois ans à analyser des organisations m’ont appris à chercher pourquoi un système casse. Depuis 2023, les systèmes que j’analyse sont techniques.',
       'Je développe mes compétences en DevOps, DevSecOps, automatisation, conteneurs, CI/CD, monitoring et Infrastructure as Code à travers des projets pratiques et des laboratoires techniques. Je n’apprends pas les outils dans le vide : je les mets en service sur mes propres projets jusqu’à ce qu’ils tiennent.',
       'Mon laboratoire DevOps couvre la chaîne complète — build, tests, analyse qualité, portes de sécurité, déploiement, monitoring et observabilité. Mon second projet est un logiciel de gestion livré en application installable pour des commerçants.',
       'Je cherche une alternance ou un stage en DevOps, DevSecOps, cloud, infrastructure ou administration système, à Dakar ou à distance.',
     ],
     facts: [
       { label: 'Poste visé', value: 'Junior DevOps / DevSecOps' },
-      { label: 'Formation', value: "Master 1 Économie de l'environnement" },
+      { label: 'Formation', value: 'Master 2 Économie de l’environnement · Licence 1 & 2 Cybersécurité' },
       { label: 'Base', value: 'Sangalkam, Dakar' },
       { label: 'Langues', value: 'Français, Anglais' },
     ],
@@ -462,7 +462,7 @@ const fr = {
     studiesTitle: 'Formation',
     workTitle: 'Expérience professionnelle',
     entries: {
-      master1: 'Master 1 — Économie de l’environnement et du développement durable',
+      master: 'Master 2 — Économie de l’environnement et du développement durable',
       l2cyber: 'Licence 2 — Cyber Security',
       l1cyber: 'Licence 1 — Cyber Security',
       l3eco: 'Licence 3 — Économie Appliquée',
@@ -600,14 +600,14 @@ const en: Content = {
     heading: 'I came from economics. It left me with the habit of understanding a system before touching it.',
     photoAlt: 'Ibrahima Diallo, professional portrait',
     body: [
-      'I am a first-year Master’s student in Environmental Economics and Sustainable Development, after two years of undergraduate study in cybersecurity. That path looks scattered but it has a logic: three years analysing organisations taught me to look for why a system breaks. Since 2023 the systems I analyse have been technical ones.',
+      'I am a second-year Master’s student in Environmental Economics and Sustainable Development, after two years of undergraduate study in cybersecurity. That path looks scattered but it has a logic: three years analysing organisations taught me to look for why a system breaks. Since 2023 the systems I analyse have been technical ones.',
       'I am building skills in DevOps, DevSecOps, automation, containers, CI/CD, monitoring and Infrastructure as Code through practical projects and technical labs. I do not learn tools in the abstract: I run them on my own projects until they hold.',
       'My DevOps lab covers the full chain — build, tests, quality analysis, security gates, deployment, monitoring and observability. My second project is management software shipped as an installable application for shopkeepers.',
       'I am looking for an apprenticeship or internship in DevOps, DevSecOps, cloud, infrastructure or systems administration, in Dakar or remote.',
     ],
     facts: [
       { label: 'Target role', value: 'Junior DevOps / DevSecOps' },
-      { label: 'Studying', value: 'MSc year 1, Environmental Economics' },
+      { label: 'Education', value: 'MSc year 2, Environmental Economics · Cyber Security years 1 & 2' },
       { label: 'Based in', value: 'Sangalkam, Dakar' },
       { label: 'Languages', value: 'French, English' },
     ],
@@ -771,7 +771,7 @@ const en: Content = {
     studiesTitle: 'Studies',
     workTitle: 'Professional experience',
     entries: {
-      master1: 'MSc year 1 — Environmental Economics and Sustainable Development',
+      master: 'MSc year 2 — Environmental Economics and Sustainable Development',
       l2cyber: 'Year 2 — Cyber Security',
       l1cyber: 'Year 1 — Cyber Security',
       l3eco: 'Year 3 — Applied Economics',
