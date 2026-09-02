@@ -221,7 +221,8 @@ export const SKILL_GROUPS: SkillGroup[] = [
 
 /** Studies and work, most recent first. */
 export const TIMELINE = [
-  { key: 'master', period: 'mai 2025 →', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
+  { key: 'master2', period: 'juil. 2026 →', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
+  { key: 'master1', period: 'mai 2025 — juin 2026', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
   { key: 'l2cyber', period: 'oct. 2024 — juil. 2025', place: "Institut Supérieur d'Informatique, Keur Massar", kind: 'study' },
   { key: 'l1cyber', period: 'nov. 2023 — juil. 2024', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
   { key: 'l3eco', period: 'sept. 2022 — juil. 2023', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
@@ -462,7 +463,8 @@ const fr = {
     studiesTitle: 'Formation',
     workTitle: 'Expérience professionnelle',
     entries: {
-      master: 'Master 2 — Économie de l’environnement et du développement durable',
+      master2: 'Master 2 — Économie de l’environnement et du développement durable',
+      master1: 'Master 1 — Économie de l’environnement et du développement durable',
       l2cyber: 'Licence 2 — Cyber Security',
       l1cyber: 'Licence 1 — Cyber Security',
       l3eco: 'Licence 3 — Économie Appliquée',
@@ -771,7 +773,8 @@ const en: Content = {
     studiesTitle: 'Studies',
     workTitle: 'Professional experience',
     entries: {
-      master: 'MSc year 2 — Environmental Economics and Sustainable Development',
+      master2: 'MSc year 2 — Environmental Economics and Sustainable Development',
+      master1: 'MSc year 1 — Environmental Economics and Sustainable Development',
       l2cyber: 'Year 2 — Cyber Security',
       l1cyber: 'Year 1 — Cyber Security',
       l3eco: 'Year 3 — Applied Economics',
