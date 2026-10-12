@@ -3,8 +3,8 @@
 `cv.html` est la source du CV téléchargeable depuis le site. Le PDF publié
 (`public/CV-Ibrahima-Diallo.pdf`) en est le rendu.
 
-La photo est intégrée directement dans le HTML en base64 : le fichier est donc
-autonome, il n'a besoin d'aucune image à côté de lui.
+La photo est chargée depuis `../public/img/ibrahima-diallo-2026-10.jpg`. Conserver
+le dossier `public/img/` à côté de la source pour que le portrait s'affiche.
 
 ## Modifier le CV
 
@@ -15,6 +15,8 @@ autonome, il n'a besoin d'aucune image à côté de lui.
    **Graphiques d'arrière-plan** — sans cette dernière case, la colonne bleue
    et les accents verts disparaissent.
 5. Enregistrer par-dessus `public/CV-Ibrahima-Diallo.pdf`, puis pousser.
+6. Lors d'une nouvelle mise à jour, changer aussi le paramètre de version
+   de `IDENTITY.cv` dans `src/content.ts` pour renouveler le téléchargement.
 
 ## Contrainte à respecter
 

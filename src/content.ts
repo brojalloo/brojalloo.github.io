@@ -32,9 +32,8 @@ export const IDENTITY = {
   github: 'https://github.com/brojalloo',
   githubHandle: 'brojalloo',
   linkedin: 'https://www.linkedin.com/in/ibrahima-diallo9147a6301',
-  cv: 'CV-Ibrahima-Diallo.pdf',
-  photo: 'img/ibrahima-diallo-640.jpg',
-  photo2x: 'img/ibrahima-diallo-1280.jpg',
+  cv: 'CV-Ibrahima-Diallo.pdf?v=2026-10-12',
+  photo: 'img/ibrahima-diallo-2026-10.jpg',
   /** Approximate, for the HUD coordinate readout. Sangalkam, Dakar region. */
   coords: '14.7889°N 17.2231°W',
 } as const
@@ -221,6 +220,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
 
 /** Studies and work, most recent first. */
 export const TIMELINE = [
+  { key: 'binn', period: '14 sept. 2026 →', place: 'B-INNOV (BINN)', kind: 'work' },
   { key: 'master2', period: 'août 2026 →', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
   { key: 'master1', period: 'mai 2025 — juin 2026', place: 'Université Numérique Cheikh Hamidou Kane, Keur Massar', kind: 'study' },
   { key: 'l2cyber', period: 'oct. 2024 — juil. 2025', place: "Institut Supérieur d'Informatique, Keur Massar", kind: 'study' },
@@ -293,10 +293,10 @@ const fr = {
       'Je suis étudiant en Master 2 d’Économie de l’environnement et du développement durable, après deux années de licence en cybersécurité. Ce parcours en apparence décousu a une logique : trois ans à analyser des organisations m’ont appris à chercher pourquoi un système casse. Depuis 2023, les systèmes que j’analyse sont techniques.',
       'Je développe mes compétences en DevOps, DevSecOps, automatisation, conteneurs, CI/CD, monitoring et Infrastructure as Code à travers des projets pratiques et des laboratoires techniques. Je n’apprends pas les outils dans le vide : je les mets en service sur mes propres projets jusqu’à ce qu’ils tiennent.',
       'Mon laboratoire DevOps couvre la chaîne complète — build, tests, analyse qualité, portes de sécurité, déploiement, monitoring et observabilité. Mon second projet est un logiciel de gestion livré en application installable pour des commerçants.',
-      'Je cherche une alternance ou un stage en DevOps, DevSecOps, cloud, infrastructure ou administration système, à Dakar ou à distance.',
+      'Depuis le 14 septembre 2026, je suis stagiaire DevOps chez B-INNOV (BINN) pour une durée de trois mois. Je participe à l’administration et à la sécurisation des serveurs, au déploiement d’applications et à l’automatisation des tâches techniques avec Linux, Docker, Git et des outils de CI/CD.',
     ],
     facts: [
-      { label: 'Poste visé', value: 'Junior DevOps / DevSecOps' },
+      { label: 'Poste actuel', value: 'Stagiaire DevOps · B-INNOV (BINN)' },
       { label: 'Formation', value: 'Master 2 Économie de l’environnement · Licence 1 & 2 Cybersécurité' },
       { label: 'Base', value: 'Sangalkam, Dakar' },
       { label: 'Langues', value: 'Français, Anglais' },
@@ -468,11 +468,17 @@ const fr = {
       l2cyber: 'Licence 2 — Cyber Security',
       l1cyber: 'Licence 1 — Cyber Security',
       l3eco: 'Licence 3 — Économie Appliquée',
+      binn: 'Stagiaire DevOps',
       stage: 'Chargé de clientèle',
       l2aes: 'Licence 2 — Administration Économique et Sociale',
       l1aes: 'Licence 1 — Administration Économique et Sociale',
       bac: 'Baccalauréat — sciences humaines et sociales',
     } as Record<string, string>,
+    binn: {
+      period: '14 septembre 2026 - en cours',
+      duration: 'Stage de 3 mois · fin prévue le 14 décembre 2026',
+      missions: 'Administration et sécurisation des serveurs, déploiement d’applications et automatisation des tâches techniques. Technologies : Linux, Docker, Git et outils de CI/CD.',
+    },
     kinds: { study: 'Formation', cert: 'Certification', work: 'Expérience' } as Record<string, string>,
   },
 
@@ -535,7 +541,7 @@ const fr = {
   },
 
   contact: {
-    kicker: 'Disponible pour une alternance ou un stage',
+    kicker: 'Stagiaire DevOps chez B-INNOV (BINN)',
     heading:
       'Vous souhaitez échanger sur un projet ou une opportunité ? Contactez-moi.',
     body:
@@ -605,10 +611,10 @@ const en: Content = {
       'I am a second-year Master’s student in Environmental Economics and Sustainable Development, after two years of undergraduate study in cybersecurity. That path looks scattered but it has a logic: three years analysing organisations taught me to look for why a system breaks. Since 2023 the systems I analyse have been technical ones.',
       'I am building skills in DevOps, DevSecOps, automation, containers, CI/CD, monitoring and Infrastructure as Code through practical projects and technical labs. I do not learn tools in the abstract: I run them on my own projects until they hold.',
       'My DevOps lab covers the full chain — build, tests, quality analysis, security gates, deployment, monitoring and observability. My second project is management software shipped as an installable application for shopkeepers.',
-      'I am looking for an apprenticeship or internship in DevOps, DevSecOps, cloud, infrastructure or systems administration, in Dakar or remote.',
+      'Since 14 September 2026, I have been a DevOps intern at B-INNOV (BINN) on a three-month internship. I work on server administration and security, application deployment and technical task automation using Linux, Docker, Git and CI/CD tools.',
     ],
     facts: [
-      { label: 'Target role', value: 'Junior DevOps / DevSecOps' },
+      { label: 'Current role', value: 'DevOps intern · B-INNOV (BINN)' },
       { label: 'Education', value: 'MSc year 2, Environmental Economics · Cyber Security years 1 & 2' },
       { label: 'Based in', value: 'Sangalkam, Dakar' },
       { label: 'Languages', value: 'French, English' },
@@ -778,10 +784,16 @@ const en: Content = {
       l2cyber: 'Year 2 — Cyber Security',
       l1cyber: 'Year 1 — Cyber Security',
       l3eco: 'Year 3 — Applied Economics',
+      binn: 'DevOps intern',
       stage: 'Account handler',
       l2aes: 'Year 2 — Economic and Social Administration',
       l1aes: 'Year 1 — Economic and Social Administration',
       bac: 'Baccalaureate — humanities and social sciences',
+    },
+    binn: {
+      period: '14 September 2026 - ongoing',
+      duration: '3-month internship · expected end on 14 December 2026',
+      missions: 'Server administration and security, application deployment and technical task automation. Technologies: Linux, Docker, Git and CI/CD tools.',
     },
     kinds: { study: 'Studies', cert: 'Certification', work: 'Experience' },
   },
@@ -845,7 +857,7 @@ const en: Content = {
   },
 
   contact: {
-    kicker: 'Available for an apprenticeship or internship',
+    kicker: 'DevOps intern at B-INNOV (BINN)',
     heading: 'Want to talk about a project or an opportunity? Get in touch.',
     body:
       'DevOps, DevSecOps, cloud, infrastructure or systems administration — in Dakar or remote. If you want to see the lab running live, I can walk through it in about twenty minutes.',

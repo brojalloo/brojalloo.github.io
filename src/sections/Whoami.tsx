@@ -27,15 +27,13 @@ export function Whoami() {
       >
         <img
           src={IDENTITY.photo}
-          srcSet={`${IDENTITY.photo} 640w, ${IDENTITY.photo2x} 1280w`}
-          sizes="(min-width: 640px) 200px, 160px"
-          width={640}
-          height={800}
+          width={1828}
+          height={2560}
           alt={c.photoAlt}
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          className="aspect-[4/5] w-40 shrink-0 border border-rule object-cover sm:w-[200px]"
+          className="aspect-[4/5] w-40 shrink-0 border border-rule object-cover object-top sm:w-[200px]"
         />
 
         <div className="min-w-0 sm:pt-1">
