@@ -59,7 +59,7 @@ Les sept sections, dans l'ordre de la navigation : à propos, compétences, cert
 - **Changer un texte** → `src/content.ts`. Les deux langues sont côte à côte dans le même fichier pour qu'elles ne se désynchronisent pas. Aucun texte visible n'est écrit ailleurs.
 - **Ajouter un projet** → tableau `PROJECTS` dans `src/content.ts`, puis les traductions correspondantes dans les objets `fr.projets` et `en.projets`. Un projet sans dépôt public met `repo: null` et le lien disparaît de lui-même.
 - **Ajouter une certification** → tableau `CERTIFICATIONS` dans `src/content.ts`. Le champ `date` accepte `null` quand seule la fin de formation est confirmée : la carte affiche alors « Terminé » au lieu d'une date inventée.
-- **Remplacer le CV** → modifier `cv-source/cv.html`, régénérer `public/CV-Ibrahima-Diallo.pdf` et actualiser la version dans `IDENTITY.cv` (`src/content.ts`) pour éviter un ancien téléchargement en cache.
+- **Remplacer le CV** → modifier `cv-source/cv.html` puis actualiser la version dans `IDENTITY.cv` (`src/content.ts`). Le workflow GitHub Actions régénère automatiquement `CV-Ibrahima-Diallo.pdf` avec Chrome avant de publier sur GitHub Pages (sans committer le binaire).
 - **Remplacer la photo** → ajouter le portrait dans `public/img/`, puis actualiser `IDENTITY.photo`, les métadonnées dans `index.html` et la photo de `cv-source/cv.html`. Le portrait actuel est `img/ibrahima-diallo-2026-10.jpg` ; la rubrique À propos affiche un cadre 4:5 aligné en haut.
 - **Changer les couleurs ou les polices** → le bloc `@theme` en haut de `src/index.css`. Les couleurs utilisées dans les matériaux three.js sont écrites en dur dans les fichiers de `src/scene/`, en valeurs hexadécimales identiques.
 - **Déplacer un nœud dans l'espace** → `src/scene/nodes.ts`.
