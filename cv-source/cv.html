@@ -2,350 +2,121 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
-<title>Ibrahima Diallo — CV DevOps</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ibrahima Diallo - CV DevOps</title>
 <style>
-  /* Reproduces the two-column CV: dark sidebar, white main column, teal accents. */
   @page { size: A4; margin: 0; }
-
-  :root {
-    --navy: #16333f;
-    --navy-deep: #102730;
-    --teal: #1f9c72;
-    --ink: #14303c;
-    --body: #333e46;
-    --muted: #6b7a83;
-    --rule: #dde3e7;
-    --chip: #eef2f4;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html, body {
-    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    font-size: 8.3pt;
-    line-height: 1.36;
-    color: var(--body);
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  .page {
-    width: 210mm;
-    min-height: 297mm;
-    display: flex;
-    background: #fff;
-  }
-
-  /* ---------- Sidebar ---------- */
-  .side {
-    width: 60mm;
-    flex: 0 0 60mm;
-    background: var(--navy);
-    color: #e8eef1;
-    padding: 7mm 5mm 6mm;
-  }
-
-  .photo {
-    width: 30mm; height: 30mm;
-    border-radius: 50%;
-    object-fit: cover;
-    object-position: 50% 0%;
-    display: block;
-    margin: 0 auto 4mm;
-    border: 2.5px solid var(--teal);
-  }
-
-  .side .name {
-    font-size: 13.5pt; font-weight: 700; letter-spacing: .01em;
-    text-align: center; color: #fff; line-height: 1.2;
-  }
-  .side .role {
-    margin-top: 1.6mm; text-align: center;
-    font-size: 7.6pt; font-weight: 700; letter-spacing: .07em;
-    text-transform: uppercase; color: var(--teal);
-  }
-
-  .side h2 {
-    font-size: 8.2pt; font-weight: 700; letter-spacing: .13em;
-    text-transform: uppercase; color: #fff;
-    margin: 5mm 0 2mm; padding-bottom: 1.2mm;
-    border-bottom: 1px solid rgba(255,255,255,.22);
-  }
-
-  .kv { display: flex; gap: 2.5mm; margin-bottom: 1.5mm; font-size: 8.3pt; }
-  .kv dt { flex: 0 0 7.5mm; font-weight: 700; color: var(--teal); }
-  .kv dd { flex: 1; word-break: break-word; color: #dfe7ea; }
-  /* The address is 28 characters and must not hyphenate mid-domain. */
-  .kv dd.mail { font-size: 7.1pt; letter-spacing: -.01em; word-break: normal; }
-
-  .grp { margin-bottom: 2.6mm; }
-  .grp h3 {
-    font-size: 7.2pt; font-weight: 700; letter-spacing: .09em;
-    text-transform: uppercase; color: var(--teal); margin-bottom: 1.6mm;
-  }
-  .chips { display: flex; flex-wrap: wrap; gap: 1.2mm; }
-  .chip {
-    background: rgba(255,255,255,.11);
-    border-radius: 2px;
-    padding: .9mm 2mm;
-    font-size: 7.6pt;
-    color: #eaf1f3;
-    white-space: nowrap;
-  }
-
-  .lang { margin-bottom: 2.1mm; }
-  .lang .row { display: flex; justify-content: space-between; font-size: 8.3pt; margin-bottom: 1.1mm; }
-  .lang .row span:last-child { color: #b9c7ce; }
-  .bar { height: 2.4px; background: rgba(255,255,255,.18); border-radius: 2px; }
-  .bar i { display: block; height: 100%; background: var(--teal); border-radius: 2px; }
-
-  .act { margin-bottom: 2.2mm; font-size: 8pt; }
-  .act b { display: block; color: #fff; font-weight: 700; }
-  .act span { color: #b9c7ce; }
-
-  /* ---------- Main column ---------- */
-  .main { flex: 1; min-width: 0; padding: 7mm 6mm 4mm; }
-
-  .main .title { font-size: 21pt; font-weight: 800; color: var(--ink); letter-spacing: -.01em; line-height: 1.05; }
-  .main .subtitle { margin-top: 1.2mm; font-size: 9.6pt; font-weight: 700; color: var(--teal); }
-
-  .main h2 {
-    font-size: 9.2pt; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
-    color: var(--ink); margin: 1.8mm 0 1.3mm; padding-bottom: 1.1mm;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  p { text-align: justify; }
-
-  .card { background: #f6f9fa; border-left: 2.5px solid var(--teal); padding: 2mm 3mm; }
-  .card .head { display: block; }
-  .card .head b { font-size: 9.4pt; color: var(--ink); }
-  .card .head span { display: block; margin-top: 1mm; font-size: 8.2pt; color: var(--teal); font-weight: 700; white-space: nowrap; }
-
-  ul { list-style: none; margin-top: 1.3mm; }
-  ul li { position: relative; padding-left: 3.4mm; margin-bottom: .6mm; }
-  ul li::before { content: ""; position: absolute; left: 0; top: 1.55mm; width: 1.3mm; height: 1.3mm; background: var(--teal); border-radius: 50%; }
-
-  .entry { margin-bottom: 1.1mm; }
-  .entry .line { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
-  .entry .line b { font-size: 9.2pt; color: var(--ink); }
-  .entry .line span { font-size: 8.2pt; font-weight: 700; color: var(--teal); white-space: nowrap; }
-  .entry .org { font-size: 8.4pt; color: var(--muted); font-style: italic; }
-
-  /* Projects: two per row, compact enough to keep the CV on one page. */
-  .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8mm 3.5mm; margin-top: .5mm; }
-  .proj b { color: var(--ink); font-size: 8.9pt; }
-  .proj .tech { font-size: 7.8pt; color: var(--teal); font-weight: 600; }
-  .proj p { line-height: 1.25; font-size: 8.2pt; color: var(--body); text-align: left; margin-top: .3mm; }
-
-  .certs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.1mm 5mm; }
-  .cert { display: flex; justify-content: space-between; align-items: baseline; gap: 2mm; font-size: 8.4pt; }
-  .cert span { color: var(--teal); font-weight: 700; font-size: 7.9pt; white-space: nowrap; }
-    .cert span:first-child { white-space: normal; min-width: 0; }
-  .note { margin-top: 1.8mm; font-size: 7.6pt; color: var(--muted); text-align: right; }
+  :root { --navy:#16333f; --teal:#178f76; --ink:#183541; --muted:#526771; --rule:#dce5e9; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; font-family:Arial,"DejaVu Sans",sans-serif; color:#303d45; font-size:8.85pt; line-height:1.4; }
+  body { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .page { width:210mm; height:297mm; display:flex; background:#fff; overflow:hidden; }
+  aside { width:54mm; flex:0 0 54mm; background:var(--navy); color:#e9f2f2; padding:11mm 5.3mm 9mm; }
+  .name-side { color:white; font-size:15.4pt; font-weight:800; letter-spacing:.01em; line-height:1.1; }
+  .role-side { color:#64d0b6; font-size:8.3pt; font-weight:bold; margin-top:2mm; line-height:1.4; }
+  aside h2 { color:white; text-transform:uppercase; font-size:8.5pt; letter-spacing:.12em; border-bottom:1px solid #58717b; padding-bottom:1.5mm; margin:9mm 0 3mm; }
+  .contact { margin-bottom:2.2mm; overflow-wrap:anywhere; font-size:8pt; }
+  .contact strong { color:#66d2b9; display:block; font-size:7.1pt; text-transform:uppercase; letter-spacing:.07em; margin-bottom:.5mm; }
+  .skill-title { color:#64d0b6; font-weight:bold; margin:3mm 0 .7mm; font-size:8pt; }
+  .skills { color:#f0f5f5; font-size:7.9pt; line-height:1.45; }
+  .small { font-size:7.5pt; line-height:1.4; color:#d3e3e5; }
+  main { flex:1; padding:10mm 9mm 7mm 9mm; min-width:0; }
+  .head-name { font-size:22.5pt; font-weight:800; color:var(--ink); line-height:1.03; letter-spacing:-.03em; }
+  .head-role { color:var(--teal); font-weight:bold; font-size:10.2pt; margin-top:2mm; }
+  main h2 { color:var(--ink); text-transform:uppercase; font-weight:800; font-size:9.4pt; letter-spacing:.075em; border-bottom:1px solid var(--rule); margin:6mm 0 2.5mm; padding-bottom:1mm; }
+  p { margin:0; }
+  .lead { font-size:9pt; line-height:1.52; }
+  .bullets { list-style:none; padding:0; margin:0; }
+  .bullets li { position:relative; padding-left:3.8mm; margin:0 0 1.6mm; line-height:1.48; }
+  .bullets li:before { content:""; position:absolute; left:0; top:1.55mm; width:1.35mm; height:1.35mm; border-radius:50%; background:var(--teal); }
+  .bullets strong, .project strong, .education strong { color:var(--ink); }
+  .project { margin:0 0 3mm; }
+  .project .proj-name { color:var(--ink); font-weight:700; font-size:9pt; }
+  .project .proj-tech { color:var(--teal); font-size:7.8pt; font-weight:700; margin:.4mm 0 .6mm; }
+  .projects { display:grid; grid-template-columns:1fr 1fr; column-gap:5mm; row-gap:2.2mm; }
+  .education { margin:0 0 3mm; }
+  .education .date { float:right; color:var(--teal); font-size:7.7pt; font-weight:700; }
+  .education .org { color:var(--muted); font-size:8pt; margin-top:.4mm; }
+  .certs { color:var(--muted); font-size:8.65pt; line-height:1.48; }
+  .footnote { margin-top:4mm; color:#6a7a83; font-size:7pt; }
 </style>
 </head>
 <body>
 <div class="page">
-
-  <aside class="side">
-    <img class="photo" src="../public/img/ibrahima-diallo-2026-10.jpg" alt="Ibrahima Diallo" />
-    <div class="name">Ibrahima Diallo</div>
-    <div class="role">DevOps Junior &amp; Cybersécurité</div>
+  <aside>
+    <div class="name-side">Ibrahima<br>Diallo</div>
+    <div class="role-side">DEVOPS JUNIOR<br>ADMINISTRATION LINUX<br>CYBERSÉCURITÉ</div>
 
     <h2>Contact</h2>
-    <dl>
-      <div class="kv"><dt>Mail</dt><dd class="mail">ibrahimadiallo1208@gmail.com</dd></div>
-      <div class="kv"><dt>Tél</dt><dd>+221 76 881 59 72</dd></div>
-      <div class="kv"><dt>Lieu</dt><dd>Sangalkam, Dakar, Sénégal</dd></div>
-      <div class="kv"><dt>Web</dt><dd>brojalloo.github.io</dd></div>
-      <div class="kv"><dt>Git</dt><dd>github.com/brojalloo</dd></div>
-    </dl>
+    <div class="contact"><strong>Adresse</strong>Sangalkam, Dakar, Sénégal</div>
+    <div class="contact"><strong>Téléphone</strong>+221 76 881 59 72</div>
+    <div class="contact"><strong>E-mail</strong>ibrahimadiallo1208@gmail.com</div>
+    <div class="contact"><strong>Portfolio</strong>brojalloo.github.io</div>
+    <div class="contact"><strong>GitHub</strong>github.com/brojalloo</div>
 
-    <h2>Compétences techniques</h2>
-
-    <div class="grp">
-      <h3>CI/CD &amp; DevOps</h3>
-      <div class="chips">
-        <span class="chip">Jenkins</span><span class="chip">GitHub Actions</span>
-        <span class="chip">Git / GitHub</span><span class="chip">Docker</span>
-        <span class="chip">Docker Compose</span>
-      </div>
-    </div>
-
-    <div class="grp">
-      <h3>Sécurité</h3>
-      <div class="chips">
-        <span class="chip">Trivy</span><span class="chip">SonarQube</span><span class="chip">UFW / Fail2ban</span>
-        <span class="chip">Ethical Hacking</span><span class="chip">Réseaux (CCNA 1 &amp; 2)</span>
-      </div>
-    </div>
-
-    <div class="grp">
-      <h3>Monitoring</h3>
-      <div class="chips">
-        <span class="chip">Prometheus</span><span class="chip">Grafana</span>
-        <span class="chip">Sentry</span><span class="chip">cAdvisor</span>
-      </div>
-    </div>
-
-    <div class="grp">
-      <h3>Infrastructure</h3>
-      <div class="chips">
-        <span class="chip">Terraform</span><span class="chip">Nginx</span><span class="chip">Linux</span><span class="chip">Traefik</span>
-      </div>
-    </div>
-
-    <div class="grp">
-      <h3>Développement</h3>
-      <div class="chips">
-        <span class="chip">Node.js</span><span class="chip">Laravel</span>
-        <span class="chip">React</span><span class="chip">React Native</span>
-        <span class="chip">Python</span><span class="chip">Java</span>
-        <span class="chip">PHP</span><span class="chip">PostgreSQL</span>
-      </div>
-    </div>
-
-    <div class="grp">
-      <h3>Bureautique</h3>
-      <div class="chips">
-        <span class="chip">Excel</span><span class="chip">Word</span><span class="chip">PowerPoint</span>
-      </div>
-    </div>
+    <h2>Compétences</h2>
+    <div class="skill-title">Systèmes &amp; infrastructure</div>
+    <p class="skills">Linux / Ubuntu · SSH · VPS · Nginx · Traefik · réseaux</p>
+    <div class="skill-title">Conteneurs &amp; CI/CD</div>
+    <p class="skills">Docker · Docker Compose · Git · GitHub Actions · Jenkins</p>
+    <div class="skill-title">Sécurité</div>
+    <p class="skills">UFW · Fail2ban · Trivy · SonarQube · SSH hardening</p>
+    <div class="skill-title">Supervision</div>
+    <p class="skills">Prometheus · Grafana · Node Exporter · cAdvisor · Sentry</p>
+    <div class="skill-title">Développement &amp; données</div>
+    <p class="skills">PHP / Laravel · Node.js · Python · Bash · PostgreSQL · MySQL</p>
 
     <h2>Langues</h2>
-    <div class="lang">
-      <div class="row"><span>Français</span><span>Courant</span></div>
-      <div class="bar"><i style="width:96%"></i></div>
-    </div>
-    <div class="lang">
-      <div class="row"><span>Anglais</span><span>Notions</span></div>
-      <div class="bar"><i style="width:42%"></i></div>
-    </div>
+    <p class="small">Français : courant<br>Wolof : courant<br>Anglais : débutant</p>
 
-    <h2>Activités</h2>
-    <div class="act">
-      <b>Gouvernement Scolaire</b>
-      <span>Membre du bureau, Lycée de Sangalkam (2019–2020)</span>
-    </div>
-    <div class="act">
-      <b>Assoc. des Jeunes de Sangalkam</b>
-      <span>Membre du bureau (2021–2023)</span>
-    </div>
+    <h2>Services</h2>
+    <p class="small">Déploiement, sécurisation, supervision et maintenance de services web sur VPS.</p>
   </aside>
 
-  <main class="main">
-    <div class="title">IBRAHIMA DIALLO</div>
-    <div class="subtitle">DevOps Junior — CI/CD, Sécurité &amp; Monitoring</div>
+  <main>
+    <div class="head-name">IBRAHIMA DIALLO</div>
+    <div class="head-role">DevOps junior · Linux · Docker · CI/CD · Monitoring</div>
 
     <h2>Profil</h2>
-    <p>DevOps junior avec une formation en cybersécurité et une pratique de l'administration Linux,
-    de Docker, des pipelines CI/CD et de la supervision. Mes réalisations incluent la préparation
-    de VPS sécurisés et des déploiements conteneurisés. Je propose ces prestations en freelance
-    et développe <b>DevOps Lab</b>, un laboratoire CI/CD complet.</p>
+    <p class="lead">Profil DevOps junior, formé en cybersécurité et administration système. Expérience pratique de la configuration de VPS, du déploiement d'applications conteneurisées, de l'automatisation et de la supervision. Disponible pour des prestations techniques freelance, à Dakar ou à distance.</p>
 
-    <h2>Missions DevOps et expérience</h2>
-    <div class="entry">
-      <div class="line"><b>Missions techniques DevOps / Administration Linux</b><span>2026 - en cours</span></div>
-      <div class="org">Réalisations techniques et projets d'infrastructure (anonymisés)</div>
-      <ul>
-        <li>Configuration et durcissement de VPS Ubuntu : SSH, comptes, UFW et Fail2ban.</li>
-        <li>Déploiements Docker Compose, reverse proxy Nginx/Traefik et HTTPS.</li>
-        <li>Workflows GitHub Actions, déploiements contrôlés et analyses Trivy.</li>
-        <li>Supervision Prometheus/Grafana, Node Exporter et cAdvisor.</li>
-        <li>Sauvegardes automatisées, vérifications et documentation d'exploitation.</li>
-      </ul>
-    </div>
-    <div class="entry">
-      <div class="line"><b>Chargé de clientèle</b><span>2022 – 2023</span></div>
-      <div class="org">Grossiste, Rufisque</div>
-      <ul>
-        <li>Accueil, conseil et fidélisation de la clientèle au quotidien.</li>
-        <li>Suivi des commandes et coordination avec la gestion des stocks.</li>
-      </ul>
-    </div>
+    <h2>Missions et réalisations techniques</h2>
+    <ul class="bullets">
+      <li><strong>Administration Linux :</strong> préparation de VPS Ubuntu, gestion des utilisateurs, sécurisation SSH, pare-feu UFW et Fail2ban.</li>
+      <li><strong>Déploiement :</strong> Docker Compose, reverse proxy Nginx/Traefik, HTTPS, configuration des environnements et contrôles de disponibilité.</li>
+      <li><strong>Automatisation :</strong> workflows GitHub Actions, déploiements contrôlés, scans Trivy et procédures de validation.</li>
+      <li><strong>Exploitation :</strong> Prometheus/Grafana, Node Exporter, cAdvisor, sauvegardes automatisées et tests de restauration.</li>
+    </ul>
 
-    <h2>Projet phare — DevOps Lab</h2>
-    <div class="card">
-      <div class="head">
-        <b>Laboratoire DevOps de bout en bout — projet personnel</b>
-        <span>github.com/brojalloo/devops-lap</span>
-      </div>
-      <ul>
-        <li>Pipeline Jenkins à 9 étapes : checkout, installation, tests, SonarQube, Quality Gate,
-          build Docker, scan Trivy, déploiement et health check.</li>
-        <li>Quality Gate SonarQube et scan Trivy CRITICAL bloquants, rapports archivés ; secrets
-          injectés via Jenkins Credentials, sans clé ni DSN en clair. IaC préparée avec Terraform.</li>
-        <li>Monitoring : Prometheus, Grafana, Node Exporter, cAdvisor. Erreurs applicatives : Sentry.</li>
-      </ul>
+    <h2>Projets sélectionnés</h2>
+    <div class="project">
+      <div class="proj-name">DevOps Lab — projet personnel</div>
+      <div class="proj-tech">Jenkins · Docker · SonarQube · Trivy · Prometheus · Grafana</div>
+      <p>Pipeline CI/CD à 9 étapes, contrôles bloquants de qualité et sécurité, supervision des services et gestion sécurisée des secrets. <strong>github.com/brojalloo/devops-lap</strong></p>
     </div>
-
-    <h2>Autres projets</h2>
     <div class="projects">
-      <div class="proj">
-        <b>ONCC Sénégal</b>
-        <div class="tech">Laravel 12 · PostgreSQL · Docker · GitHub Actions</div>
-        <p>Données climatiques des 14 régions, visualisation et 4 rôles côté serveur.
-        Image Docker nginx / php-fpm / supervisord et 3 workflows CI/CD.</p>
+      <div class="project">
+        <div class="proj-name">ONCC Sénégal</div>
+        <div class="proj-tech">Laravel · PostgreSQL · Docker</div>
+        <p>Plateforme de données climatiques avec rôles applicatifs et workflows GitHub Actions.</p>
       </div>
-      <div class="proj">
-        <b>TekkiPro — SaaS</b>
-        <div class="tech">Node.js · Express · Prisma · React · React Native</div>
-        <p>Monorepo de gestion de commerce : API, client web et client mobile. CI GitHub Actions
-        sur chaque push et pull request.</p>
-      </div>
-      <div class="proj">
-        <b>Sen-Recrutement</b>
-        <div class="tech">Laravel · Docker · Render</div>
-        <p>Projet académique de Licence 2 Cybersécurité (ISI), livré via une chaîne
-        conteneurisée avec CI/CD.</p>
-      </div>
-      <div class="proj">
-        <b>TekkiPro — version desktop</b>
-        <div class="tech">Java 21 · JavaFX · SQLite</div>
-        <p>Logiciel de gestion de boutique livré en application portable Windows : stock,
-        facturation, dettes, rapports et activation par clé de licence.</p>
+      <div class="project">
+        <div class="proj-name">TekkiPro — SaaS</div>
+        <div class="proj-tech">Node.js · React · Prisma</div>
+        <p>Solution de gestion commerciale avec API, client web et intégration continue.</p>
       </div>
     </div>
 
     <h2>Formation</h2>
-    <div class="entry">
-      <div class="line"><b>Master 2 — Économie de l'Environnement et du Développement Durable</b><span>en cours</span></div>
-      <div class="org">Université Numérique Cheikh Hamidou Kane, Keur Massar</div>
-    </div>
-    <div class="entry">
-      <div class="line"><b>Master 1 — Économie de l'Environnement et du Développement Durable</b><span>mai 2025 – juin 2026</span></div>
-      <div class="org">Université Numérique Cheikh Hamidou Kane, Keur Massar</div>
-    </div>
-    <div class="entry">
-      <div class="line"><b>Licence 1 &amp; 2 — Cybersécurité</b><span>2023 – 2025</span></div>
-      <div class="org">Institut Supérieur d'Informatique / UN Cheikh Hamidou Kane, Keur Massar</div>
-    </div>
-    <div class="entry">
-      <div class="line"><b>Licence 3 — Économie Appliquée · Licence 1 &amp; 2 — Administration Économique et Sociale</b><span>2021 – 2023</span></div>
-      <div class="org">UN Cheikh Hamidou Kane / Institut Supérieur d'Informatique, Keur Massar</div>
-    </div>
-    <div class="entry">
-      <div class="line"><b>Baccalauréat, série Sciences Humaines et Sociales</b><span>2020</span></div>
-      <div class="org">Lycée de Sangalkam, Rufisque</div>
-    </div>
+    <div class="education"><span class="date">En cours</span><strong>Master — Économie de l'environnement et du développement durable</strong><div class="org">Université Numérique Cheikh Hamidou Kane (UNCHK)</div></div>
+    <div class="education"><strong>DTS — Cybersécurité</strong><div class="org">Institut Supérieur d'Informatique (ISI), Keur Massar</div></div>
+    <div class="education"><strong>Licence — Économie appliquée</strong><div class="org">Université Numérique Cheikh Hamidou Kane (UNCHK)</div></div>
 
     <h2>Certifications</h2>
-    <div class="certs">
-      <!-- Name kept exactly as confirmed. No official subtitle is claimed, and no
-           date, because neither is evidenced. -->
-      <div class="cert"><span style="color:#14303c;font-weight:700">CCNA 2</span><span>terminé</span></div>
-      <div class="cert"><span style="color:#14303c;font-weight:700">Découvrir l'esprit d'entreprise</span><span>sept. 2025</span></div>
-      <div class="cert"><span style="color:#14303c;font-weight:700">Ethical Hacker</span><span>août 2025</span></div>
-      <div class="cert"><span style="color:#14303c;font-weight:700">Introduction to Modern AI</span><span>août 2025</span></div>
-      <div class="cert"><span style="color:#14303c;font-weight:700">CCNA 1 — Présentation des réseaux</span><span>août 2025</span></div>
-      <div class="cert"><span style="color:#14303c;font-weight:700">Introduction to Cyber Security</span><span>déc. 2024</span></div>
-      <div class="cert"><span style="color:#14303c;font-weight:700">Cybermenaces : contenu et déroulement</span><span>août 2025</span></div>
-      <div class="cert"><span style="color:#14303c;font-weight:700">Analyste Junior en Cybersécurité (FORCE-N)</span><span>déc. 2024</span></div>
-    </div>
-    <div class="note">Cisco Networking Academy, sauf mention contraire · Mise à jour : 03/11/2026</div>
-  </main>
+    <p class="certs"><strong>Réseaux &amp; sécurité :</strong> CCNA 1 et 2, Ethical Hacker, Introduction to Cyber Security (Cisco). <strong>Cybersécurité :</strong> Analyste Junior en Cybersécurité (FORCE-N).</p>
 
+    <div class="footnote">Réalisations professionnelles présentées sans informations confidentielles · Mise à jour : novembre 2026</div>
+  </main>
 </div>
 </body>
 </html>

@@ -30,24 +30,19 @@ jobs:
 
       - run: npm ci
 
-      # Render the CV from the same maintained HTML source as the portfolio.
-      # The generated PDF is copied by Vite from public/ into dist/ on each deploy.
-      - uses: browser-actions/setup-chrome@v1
-        id: chrome
+      # Generate the PDF from the maintained HTML and enforce one A4 page.
+      # The generated file is copied into dist/ by Vite.
+      - uses: actions/setup-python@v5
         with:
-          chrome-version: stable
+          python-version: '3.12'
 
-      - name: Generate updated CV PDF
+      - name: Generate one-page CV PDF
         shell: bash
         run: |
-          mkdir -p public
-          "${{ steps.chrome.outputs.chrome-path }}" \
-            --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
-            --allow-file-access-from-files --no-pdf-header-footer \
-            --print-to-pdf="$GITHUB_WORKSPACE/public/CV-Ibrahima-Diallo.pdf" \
-            "file://$GITHUB_WORKSPACE/cv-source/cv.html"
+          python -m pip install --disable-pip-version-check "weasyprint==68.0" "pypdf==5.9.0"
+          python -m weasyprint cv-source/cv.html public/CV-Ibrahima-Diallo.pdf
           test -s public/CV-Ibrahima-Diallo.pdf
-          test "$(head -c 4 public/CV-Ibrahima-Diallo.pdf)" = "%PDF"
+          python -c 'from pypdf import PdfReader; assert len(PdfReader("public/CV-Ibrahima-Diallo.pdf").pages) == 1, "CV must fit on one page"'
 
       # `tsc --noEmit` on the root config checks nothing: it only holds project
       # references. `-b` is what actually type-checks src.

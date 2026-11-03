@@ -32,7 +32,7 @@ export const IDENTITY = {
   github: 'https://github.com/brojalloo',
   githubHandle: 'brojalloo',
   linkedin: 'https://www.linkedin.com/in/ibrahima-diallo9147a6301',
-  cv: 'CV-Ibrahima-Diallo.pdf?v=2026-11-03',
+  cv: 'CV-Ibrahima-Diallo.pdf?v=2026-11-03-dts-1page',
   photo: 'img/ibrahima-diallo-2026-10.jpg',
   /** Approximate, for the HUD coordinate readout. Sangalkam, Dakar region. */
   coords: '14.7889°N 17.2231°W',
