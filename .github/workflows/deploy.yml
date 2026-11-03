@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     # Documentation changes do not affect the built site.
-    paths-ignore: ['README.md', 'docs/**', 'cv-source/**']
+    paths-ignore: ['README.md', 'docs/**']
   workflow_dispatch:
 
 permissions:
@@ -29,6 +29,26 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      # Render the CV from the same maintained HTML source as the portfolio.
+      # The generated PDF is copied by Vite from public/ into dist/ on each deploy.
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+        with:
+          chrome-version: stable
+
+      - name: Generate updated CV PDF
+        shell: bash
+        run: |
+          mkdir -p public
+          "${{ steps.chrome.outputs.chrome-path }}" \
+            --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --allow-file-access-from-files --no-pdf-header-footer \
+            --print-to-pdf="$GITHUB_WORKSPACE/public/CV-Ibrahima-Diallo.pdf" \
+            "file://$GITHUB_WORKSPACE/cv-source/cv.html"
+          test -s public/CV-Ibrahima-Diallo.pdf
+          test "$(head -c 4 public/CV-Ibrahima-Diallo.pdf)" = "%PDF"
+
       # `tsc --noEmit` on the root config checks nothing: it only holds project
       # references. `-b` is what actually type-checks src.
       - run: npx tsc -b --force
