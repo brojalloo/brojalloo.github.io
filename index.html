@@ -100,7 +100,24 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Static, accessible fallback. React replaces this content when the
+         compiled application starts; it remains visible if GitHub Pages is
+         mistakenly serving the source files instead of the Vite build. -->
+    <div id="root">
+      <main style="min-height:100vh;box-sizing:border-box;background:#06080b;color:#e9e5db;font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:clamp(28px,7vw,90px);display:flex;align-items:center">
+        <div style="max-width:720px">
+          <p style="color:#4dd8c0;font-size:13px;letter-spacing:0.15em;text-transform:uppercase">Portfolio professionnel</p>
+          <h1 style="font-size:clamp(36px,7vw,66px);letter-spacing:-0.04em;line-height:1.08;margin:12px 0 15px">Ibrahima Diallo</h1>
+          <p style="color:#ffad72;font-weight:600;font-size:clamp(16px,3vw,22px)">DevOps junior · Linux · Docker · CI/CD · Cybersécurité</p>
+          <p style="line-height:1.75;color:#c9d0d3;font-size:16px;margin-top:24px">Je travaille sur la configuration et la sécurisation de serveurs Linux, les déploiements Docker, l'automatisation CI/CD et la supervision d'applications. Vous pouvez consulter mes projets ou me contacter directement.</p>
+          <p style="display:flex;gap:16px;flex-wrap:wrap;margin-top:30px">
+            <a href="https://github.com/brojalloo" style="padding:12px 16px;border:1px solid #ff7a1a;color:#ffad72;text-decoration:none;border-radius:6px">Voir mes projets GitHub</a>
+            <a href="mailto:ibrahimadiallo1208@gmail.com" style="padding:12px 16px;border:1px solid #4dd8c0;color:#4dd8c0;text-decoration:none;border-radius:6px">Me contacter</a>
+          </p>
+          <p style="color:#84979f;font-size:13px;margin-top:28px">La version interactive du portfolio nécessite le chargement de son application.</p>
+        </div>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
     <noscript>
       <div style="font-family: system-ui; padding: 2rem; color: #e9e5db; background: #06080b">
